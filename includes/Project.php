@@ -31,7 +31,7 @@ class Project {
 	}
 
 	public static function create( $name ) {
-		if ( !preg_match( '#^\w+(/w+)*(\.git)?$#', $name ) ) {
+		if ( !preg_match( '#^\w+(/\w+)*(\.git)?$#', $name ) ) {
 			throw new Exception( 'Invalid project name.' );
 		}
 		$name = preg_replace( '/\.git$/', '', $name );
