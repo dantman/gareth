@@ -89,9 +89,9 @@ class ShellGit {
 		$this->path = $path;
 	}
 
-	protected function git( $handler, $porcelain, $args = array() ) {
+	protected function git( $handler, $command, $args = array() ) {
 
-		$cmd = array_merge( array( "git", $porcelain ), $args );
+		$cmd = array_merge( array( "git", $command ), $args );
 		$cmd = implode( ' ', array_map( 'escapeshellarg', $cmd ) );
 
 		$spec = array(
@@ -130,8 +130,8 @@ class Git {
 		$this->git = new ShellGit( $path );
 	}
 
-	public function __call( $method, $args ) {
-		return call_user_func_array( array( $this->git, $method ), $args );
+	public function init() {
+		return call_user_func_array( array( $this->git, 'init' ), func_get_args() );
 	}
 	
 }
