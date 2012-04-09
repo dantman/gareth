@@ -1,6 +1,12 @@
 {% extends 'GarethBundle::layout.html.twig' %}
 
-{% block title %}{% if project is defined %}Project {{ project.name }}{% else %}Project does not exist{% endif %}{% endblock %}
+{% block title %}{% spaceless %}
+{% if project is defined %}
+Project {{ project.name }}
+{% else %}
+Project does not exist
+{% endif %}
+{% endspaceless %}{% endblock %}
 
 {% block content %}
 
