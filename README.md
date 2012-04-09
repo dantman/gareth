@@ -11,6 +11,7 @@ Requirements
 ------------
 
 Garethis currently built on top of Symfony2.
+
 * PHP 5.3.2 and up is required.
 * Any database supported by Doctrine.
 * Git must be installed in your system's PATH.
@@ -20,15 +21,15 @@ Installation
 
 Gareth is still barely written so there isn't much on installation yet, for now:
 
-# Clone Gareth and point your webservers document root to /web
-# Run `php bin/vendor install`
-# Setup a folder to host your git repos in.
-# Give the webserver write permission to /app/cache/* /app/logs/* and the directory you set your git repos up in.
-# Copy app/config/parameters.ini.sample to app/config/parameters.ini and fill in a secret key value.
-# Copy one of app/config/parameters.yml.sample or app/config/parameters.yml.sqlite to app/config/parameters.yml
-## Setup database configuration inside of parameters.yml
-## Configure repo_path with the path to the directory you setup for your git repos.
-# Setup rewrite rules on your server:
-## Paths that do not exist should point to /web/app.php or /web/app_dev.php (for local development)
-## Another rule for / will be needed or you will need to set app.php or app_dev.php as the index in your webserver config (there is no index.php)
-## /r should be aliased to your repos directory.
+1. Clone Gareth and point your webservers document root to /web
+2. Run `php bin/vendor install`
+3. Setup a folder to host your git repos in.
+4. Give the webserver write permission to /app/cache/* /app/logs/* and the directory you set your git repos up in.
+5. Copy app/config/parameters.ini.sample to app/config/parameters.ini and fill in a secret key value.
+6. Copy one of app/config/parameters.yml.sample or app/config/parameters.yml.sqlite to app/config/parameters.yml
+	1. Setup database configuration inside of parameters.yml
+	2. Configure repo_path with the path to the directory you setup for your git repos.
+7. Setup rewrite rules on your server:
+	1. Paths that do not exist should point to /web/app.php or /web/app_dev.php (for local development)
+	2. Another rule for / will be needed or you will need to set app.php or app_dev.php as the index in your webserver config (there is no index.php)
+	3. /r should be aliased to your repos directory.
