@@ -1,0 +1,20 @@
+{% extends 'GarethBundle::layout.html.twig' %}
+
+{% block title %}{% if project is defined %}Project {{ project.name }}{% else %}Project does not exist{% endif %}{% endblock %}
+
+{% block content %}
+
+{% if project is defined %}
+
+<a href="{{ url( 'projects' ) }}">Project index</a>
+
+<h1>Project {{ project.name }}</h1>
+<div class="project-description">{{ project.description }}</div>
+
+{% else %}
+
+<p>There is no project by the name {{ name }}</p>
+
+{% endif %}
+
+{% endblock %}

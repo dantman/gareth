@@ -1,3 +1,12 @@
-GarethBundle_homepage:
-    pattern:  /hello/{name}
+homepage:
+    pattern:  /
     defaults: { _controller: GarethBundle:Default:index }
+projects:
+    pattern:  /projects
+    defaults: { _controller: GarethBundle:Project:index }
+project_create:
+    pattern:  /projects/create
+    defaults: { _controller: GarethBundle:Project:create }
+project:
+    pattern:  /projects/{name}
+    defaults: { _controller: GarethBundle:Project:show }

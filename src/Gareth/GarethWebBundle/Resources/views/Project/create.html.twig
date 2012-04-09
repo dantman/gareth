@@ -1,0 +1,15 @@
+{% extends 'GarethBundle::layout.html.twig' %}
+
+{% block title %}Create Project{% endblock %}
+
+{% block content %}
+
+<a href="{{ url( 'projects' ) }}">Project index</a>
+
+<form action="{{ path( 'project_create' ) }}" method="post" {{ form_enctype(form) }}>
+	{{ form_widget(form) }}
+
+	<input type="submit" value="Create">
+</form>
+
+{% endblock %}
