@@ -1,0 +1,15 @@
+parameters:
+    database:
+        driver: pdo_mysql
+        dbname: 
+        host: 
+        port: 
+        user: 
+        password: 
+        charset: UTF8
+    repo_path: %kernel.root_dir%/repos
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: 
+    mailer_password: 
+    locale: en

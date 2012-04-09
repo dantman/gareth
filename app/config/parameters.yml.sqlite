@@ -1,0 +1,11 @@
+parameters:
+    database:
+        driver: pdo_sqlite
+        path: %kernel.root_dir%/dbs/gareth.sqlite
+        charset: UTF8
+    repo_path: %kernel.root_dir%/repos
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: 
+    mailer_password: 
+    locale: en

@@ -1,46 +1,33 @@
-README
+Gareth
 ======
+Gareth is a commit review system for git.
 
-[![Build Status](https://secure.travis-ci.org/symfony/symfony.png?branch=master)](http://travis-ci.org/symfony/symfony)
-
-What is Symfony2?
------------------
-
-Symfony2 is a PHP 5.3 full-stack web framework. It is written with speed and
-flexibility in mind. It allows developers to build better and easy to maintain
-websites with PHP.
-
-Symfony can be used to develop all kind of websites, from your personal blog
-to high traffic ones like Dailymotion or Yahoo! Answers.
+Some of the fundamental focuses of Gareth are:
+* Fetch based commit review; Git is made intending users to push to their own personal public repos. We should follow that model to in review. Gareth should be the only one directly modifying the repos inside Gareth.
+* Ease of use; Even though Gareth's repo and user's repos are not on the same servers. There is nothing stoping us from incorporating a lot of automatic handling, conventions, and helpers to make review as easy as if you were pushing directly to Gareth.
+* Branching, not amending; Git is designed to handle branding very well. And development of fixes follows the pattern of adding fixes to that. Users shouldn't be forced to modify existing commits and ruin the history of a repo in order to update a set of changes for review.
 
 Requirements
 ------------
 
-Symfony2 is only supported on PHP 5.3.2 and up.
+Garethis currently built on top of Symfony2.
+* PHP 5.3.2 and up is required.
+* Any database supported by Doctrine.
+* Git must be installed in your system's PATH.
 
 Installation
 ------------
 
-The best way to install Symfony2 is to download the Symfony Standard Edition
-available at [http://symfony.com/download][1].
+Gareth is still barely written so there isn't much on installation yet, for now:
 
-Documentation
--------------
-
-The "[Quick Tour][2]" tutorial gives you a first feeling of the framework. If,
-like us, you think that Symfony2 can help speed up your development and take
-the quality of your work to the next level, read the official
-[Symfony2 documentation][3].
-
-Contributing
-------------
-
-Symfony2 is an open source, community-driven project. If you'd like to contribute,
-please read the [Contributing Code][4] part of the documentation. If you're submitting
-a pull request, please follow the guidelines in the [Submitting a Patch][5] section.
-
-[1]: http://symfony.com/download
-[2]: http://symfony.com/get_started
-[3]: http://symfony.com/doc/current/
-[4]: http://symfony.com/doc/current/contributing/code/index.html
-[5]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
+# Clone Gareth and setup a databse.
+# Setup a folder to host your git repos in.
+# Give the webserver write permission to /app/cache/* /app/logs/* and the directory you set your git repos up in.
+# Copy app/config/parameters.ini.sample to app/config/parameters.ini and fill in a secret key value.
+# Copy one of app/config/parameters.yml.sample or app/config/parameters.yml.sqlite to app/config/parameters.yml
+## Setup database configuration inside of parameters.yml
+## Configure repo_path with the path to the directory you setup for your git repos.
+# Setup rewrite rules on your server:
+## Paths that do not exist should point to /web/app.php or /web/app_dev.php (for local development)
+## Another rule for / will be needed or you will need to set app.php or app_dev.php as the index in your webserver config (there is no index.php)
+## /r should be aliased to your repos directory.
