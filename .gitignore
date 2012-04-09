@@ -6,6 +6,8 @@ autoload.php
 /app/bootstrap*
 /app/cache/*
 /app/logs/*
+/app/dbs/*
+/app/repos/*
 /vendor/
 /app/config/parameters.yml
 /app/config/parameters.ini

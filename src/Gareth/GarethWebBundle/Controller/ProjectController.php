@@ -3,6 +3,7 @@
 namespace Gareth\GarethWebBundle\Controller;
 
 use Gareth\GarethWebBundle\Entity\Project;
+use Gareth\GarethWebBundle\Libs\GarethGit;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,12 +34,19 @@ class ProjectController extends Controller
 
     	$form = $this->createFormBuilder($project)
     		->add('name', 'text')
-    		->add('description', 'text')
-    		->getForm(); 
+    		->add('description', 'text', array('required' => false))
+    		->getForm();
 
 		if ( $request->getMethod() == 'POST' ) {
 			$form->bindRequest($request);
 			if ( $form->isValid() ) {
+                // Initialize a git repo
+                $repo_path = $this->container->getParameter('gareth.repo_path');
+                $git_class = $this->container->getParameter('gareth.git_class');
+                $git = new $git_class( rtrim( $repo_path, '/' ) . '/' . $project->getName() . '.git' );
+                $git->initialize();
+
+                // Insert project into database
 				$em = $this->getDoctrine()->getEntityManager();
 				$em->persist($project);
 				$em->flush();

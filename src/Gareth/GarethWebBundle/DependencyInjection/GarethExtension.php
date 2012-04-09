@@ -22,6 +22,9 @@ class GarethExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('gareth.repo_path', $config['repo_path']);
+        $container->setParameter('gareth.git_class', $config['git_class']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

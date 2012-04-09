@@ -10,3 +10,5 @@ project_create:
 project:
     pattern:  /projects/{name}
     defaults: { _controller: GarethBundle:Project:show }
+    requirements:
+        name: ".+"

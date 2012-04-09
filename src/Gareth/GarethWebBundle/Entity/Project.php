@@ -26,7 +26,7 @@ class Project
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255, unique="TRUE")
-     * @Assert\Regex("#^\w+(/w+)*$#")
+     * @Assert\Regex("#^\w+(/\w+)*$#")
      * )
      */
     private $name;
