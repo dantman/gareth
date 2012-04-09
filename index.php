@@ -18,6 +18,7 @@ switch( @$route['$'] ) {
 case 'projects':
 	switch( @$route['action'] ) {
 	case 'create':
+		
 		if ( $request->wasPosted() ) {
 			Project::create( $request->getVal( 'name' ) );
 		}

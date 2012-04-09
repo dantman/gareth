@@ -17,3 +17,11 @@ CREATE TABLE remotes (
 	UNIQUE r_unique (r_project,r_name),
 	UNIQUE (r_user)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE users (
+	u_id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	u_type VARBINARY(16) NOT NULL,
+	u_key VARBINARY(255) NOT NULL,
+	PRIMARY KEY (u_id),
+	UNIQUE (u_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
