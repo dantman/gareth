@@ -20,7 +20,8 @@ Installation
 
 Gareth is still barely written so there isn't much on installation yet, for now:
 
-# Clone Gareth and setup a databse.
+# Clone Gareth and point your webservers document root to /web
+# Run `php bin/vendor install`
 # Setup a folder to host your git repos in.
 # Give the webserver write permission to /app/cache/* /app/logs/* and the directory you set your git repos up in.
 # Copy app/config/parameters.ini.sample to app/config/parameters.ini and fill in a secret key value.
