@@ -1,3 +1,7 @@
+phpunit.xml
+composer.lock
+autoload.php
+/vendor/
 /web/bundles/
 /app/bootstrap*
 /app/cache/*
