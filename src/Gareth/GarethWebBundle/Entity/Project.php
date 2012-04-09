@@ -3,6 +3,7 @@
 namespace Gareth\GarethWebBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Gareth\GarethWebBundle\Entity\Project
@@ -25,6 +26,8 @@ class Project
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255, unique="TRUE")
+     * @Assert\Regex("#^\w+(/w+)*$#")
+     * )
      */
     private $name;
 
