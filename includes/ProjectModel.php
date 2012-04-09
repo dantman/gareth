@@ -41,13 +41,55 @@ class MysqliProjectModel {
 
 }
 
+class GitProjectModel {
+
+	protected $git;
+
+	public function __construct( $args ) {
+		$this->git = $args['git'];
+	}
+
+	public function iterateAll() {
+		$tree = $this->git->odb->read( 'refs/trees/projects' );
+		if ( !$tree ) {
+			return new ArrayIterator( array() );
+		}
+		// return new GitFlatTreeContentsIterator( $tree );
+	}
+
+	public function getFromName( $name ) {
+		return false;
+	}
+
+	public function insert( $name ) {
+		$odb = $this->git->odb;
+
+		if ( preg_match( '!/!', $name ) ) {
+			throw new Exception( 'Recurse tree not implemented yet.' );
+		}
+
+		$tree = $odb->createTree();
+
+		$entry = $tree->insert();
+		$entry->setName( $name );
+		$entry->setObject( $odb->write( json_encode( array( 'name' => $name ) ) ) );
+
+		$tree = $tree->write();
+
+		$this->git->updateRef( 'refs/trees/projects', $tree->getOid() );
+
+	}
+
+}
+
 abstract class ProjectModel {
 
 	public static $singleton = null;
 
 	public static function singleton() {
 		if ( !self::$singleton ) {
-			self::$singleton = new MysqliProjectModel( Config::getModelArgs() );
+			$className = Config::getModelClass( 'ProjectModel' );
+			self::$singleton = new $className( Config::getModelArgs() );
 		}
 		return self::$singleton;
 	}
