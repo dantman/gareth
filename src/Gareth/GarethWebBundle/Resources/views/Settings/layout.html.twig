@@ -1,0 +1,16 @@
+{% extends 'GarethBundle::layout.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+<h1>Settings</h1>
+
+<ul>
+	<li><a href="{{ url( 'settings' ) }}">Profile</a></li>
+	<li><a href="{{ url( 'identities' ) }}">Identities</a></li>
+</ul>
+
+{% block page %}{% endblock %}
+
+{% endblock %}

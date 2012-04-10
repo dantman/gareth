@@ -18,3 +18,10 @@ login:
     defaults:  { _controller: GarethBundle:Security:login }
 login_check:
     pattern:   /login_check
+
+settings:
+    pattern:   /settings
+    defaults:  { _controller: GarethBundle:Settings:profile }
+identities:
+    pattern:   /settings/identities
+    defaults:  { _controller: GarethBundle:Settings:identities }

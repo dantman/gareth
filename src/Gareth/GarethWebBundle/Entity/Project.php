@@ -25,7 +25,7 @@ class Project
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=255, unique="TRUE")
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      * @Assert\Regex("#^\w+(/\w+)*$#")
      * )
      */
@@ -34,7 +34,7 @@ class Project
     /**
      * @var text $description
      *
-     * @ORM\Column(name="description", type="text", nullable="TRUE")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 

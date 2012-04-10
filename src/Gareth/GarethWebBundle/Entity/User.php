@@ -3,6 +3,7 @@
 namespace Gareth\GarethWebBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -43,12 +44,27 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @var array $identities
+     *
+     * @ORM\OneToMany(targetEntity="Identity", mappedBy="user")
+     */
+    private $identities;
+
+    /**
+     * @var array $unconfirmed_identities
+     *
+     * @ORM\OneToMany(targetEntity="UnconfirmedIdentity", mappedBy="user")
+     */
+    private $unconfirmed_identities;
+
 
     public function __construct()
     {
         // FIXME? This is an insecure salt, it should be generated with a cryptographic source.
         // Then agian, our goal is to use LDAP in the end.
         $this->salt = md5(uniqid(null, true));
+        $this->identities = new ArrayCollection();
     }
 
     /**
@@ -144,5 +160,45 @@ class User implements UserInterface
     public function equals(UserInterface $user)
     {
         return $this->username === $user->getUsername();
+    }
+
+    /**
+     * Add identities
+     *
+     * @param Gareth\GarethWebBundle\Entity\Identity $identities
+     */
+    public function addIdentity(Identity $identities)
+    {
+        $this->identities[] = $identities;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getIdentities()
+    {
+        return $this->identities;
+    }
+
+    /**
+     * Add unconfirmed_identities
+     *
+     * @param Gareth\GarethWebBundle\Entity\UnconfirmedIdentity $unconfirmedIdentities
+     */
+    public function addUnconfirmedIdentity(UnconfirmedIdentity $unconfirmedIdentities)
+    {
+        $this->unconfirmed_identities[] = $unconfirmedIdentities;
+    }
+
+    /**
+     * Get unconfirmed_identities
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getUnconfirmedIdentities()
+    {
+        return $this->unconfirmed_identities;
     }
 }

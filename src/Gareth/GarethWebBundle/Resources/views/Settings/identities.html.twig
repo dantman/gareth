@@ -1,0 +1,45 @@
+{% extends 'GarethBundle:Settings:layout.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block page %}
+
+<table>
+	<thead>
+		<tr>
+			<th>Email</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th colspan="1" scope=rowgroup>Confirmed</th>
+		</tr>
+{% for identity in identities %}
+		<tr>
+			<td>{{ identity.email }}</td>
+		</tr>
+{% endfor %}
+	</tbody>
+	<tbody>
+		<tr>
+			<th colspan="1" scope=rowgroup>Unconfirmed</th>
+		</tr>
+{% for identity in unconfirmed_identities %}
+		<tr>
+			<td>{{ identity.email }}</td>
+		</tr>
+{% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="1">
+				<form action="{{ path( 'identities' ) }}" method="post" {{ form_enctype(add_form) }}>
+					{{ form_widget(add_form) }}
+
+					<input type="submit" value="Register new email">
+				</form>
+			</td>
+	</tfoot>
+</table>
+
+{% endblock %}
