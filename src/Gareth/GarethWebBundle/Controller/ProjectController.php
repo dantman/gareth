@@ -8,6 +8,8 @@ use Gareth\GarethWebBundle\Libs\GarethGit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 
 class ProjectController extends Controller
 {
@@ -28,6 +30,9 @@ class ProjectController extends Controller
         return $this->render('GarethBundle:Project:show.html.twig', array('project' => $project));
     }
 
+    /**
+     * @Secure(roles="ROLE_PROJECT_ADMIN")
+     */
     public function createAction( Request $request )
     {
     	$project = new Project;

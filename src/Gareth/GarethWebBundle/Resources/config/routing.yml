@@ -12,3 +12,9 @@ project:
     defaults: { _controller: GarethBundle:Project:show }
     requirements:
         name: ".+"
+
+login:
+    pattern:   /login
+    defaults:  { _controller: GarethBundle:Security:login }
+login_check:
+    pattern:   /login_check

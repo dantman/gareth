@@ -19,6 +19,7 @@
 		</tr>
 		{% endfor %}
 	</tbody>
+{% if is_granted('ROLE_PROJECT_ADMIN') %}
 	<tfoot>
 		<tr>
 			<td colspan="2">
@@ -26,6 +27,7 @@
 			</td>
 		</td>
 	</tfoot>
+{% endif %}
 </table>
 
 {% endblock %}
