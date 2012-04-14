@@ -67,4 +67,17 @@ class SettingsController extends Controller
             'add_form' => $form->createView(),
 		));
     }
+
+    /**
+     * @Secure(roles="ROLE_USER")
+     */
+    public function remotesAction(Request $request)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        return $this->render('GarethBundle:Settings:remotes.html.twig', array(
+            'user' => $user,
+        ));
+    }
+
 }

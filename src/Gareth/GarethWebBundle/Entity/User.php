@@ -45,6 +45,13 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @var array $roles
+     *
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users", cascade={"persist"})
+     */
+    private $roles;
+
+    /**
      * @var array $identities
      *
      * @ORM\OneToMany(targetEntity="Identity", mappedBy="user")
@@ -58,13 +65,23 @@ class User implements UserInterface
      */
     private $unconfirmed_identities;
 
+    /**
+     * @var array $remotes
+     *
+     * @ORM\OneToMany(targetEntity="Remote", mappedBy="user")
+     */
+    private $remotes;
+
 
     public function __construct()
     {
         // FIXME? This is an insecure salt, it should be generated with a cryptographic source.
         // Then agian, our goal is to use LDAP in the end.
         $this->salt = md5(uniqid(null, true));
+        $this->roles = new ArrayCollection();
+        $this->roles->add( Role::make('USER') );
         $this->identities = new ArrayCollection();
+        $this->remotes = new ArrayCollection();
     }
 
     /**
@@ -144,7 +161,17 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles->toArray();
+    }
+
+    /**
+     * Add roles
+     *
+     * @param Gareth\GarethWebBundle\Entity\Role $roles
+     */
+    public function addRole(Role $roles)
+    {
+        $this->roles->add( $roles );
     }
 
     /**
@@ -200,5 +227,25 @@ class User implements UserInterface
     public function getUnconfirmedIdentities()
     {
         return $this->unconfirmed_identities;
+    }
+
+    /**
+     * Add remotes
+     *
+     * @param Gareth\GarethWebBundle\Entity\Remote $remotes
+     */
+    public function addRemote(Remote $remotes)
+    {
+        $this->remotes[] = $remotes;
+    }
+
+    /**
+     * Get remotes
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getRemotes()
+    {
+        return $this->remotes;
     }
 }

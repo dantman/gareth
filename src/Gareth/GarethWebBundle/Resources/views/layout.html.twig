@@ -1,6 +1,17 @@
 {% extends '::base.html.twig' %}
 {% block body %}
 
+<ul>
+	<li><a href="{{ url( 'homepage' ) }}">Homepage</a></li>
+	<li><a href="{{ url( 'projects' ) }}">Projects</a></li>
+	<li><a href="{{ url( 'settings' ) }}">Settings</a></li>
+{% if is_granted('ROLE_USER') %}
+	<li><a href="{{ url( 'logout' ) }}">Logout</a></li>
+{% else %}
+	<li><a href="{{ url( 'login' ) }}">Login</a></li>
+{% endif %}
+</ul>
+
 {% block content %}{% endblock %}
 
 {% endblock %}

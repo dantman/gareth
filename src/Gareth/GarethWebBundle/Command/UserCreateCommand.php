@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Gareth\GarethWebBundle\Entity\User;
+use Gareth\GarethWebBundle\Entity\Role;
 
 class UserCreateCommand extends ContainerAwareCommand
 {
@@ -27,6 +28,7 @@ class UserCreateCommand extends ContainerAwareCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$container = $this->getContainer();
+		$em = $container->get('doctrine')->getEntityManager();
 
 		$user = new User;
 		$user->setUsername( $input->getArgument('username') );
@@ -38,10 +40,9 @@ class UserCreateCommand extends ContainerAwareCommand
 
 		// Add ROLE_ADMIN if told to
 		if ( $input->getOption('admin') ) {
-			// XXX: Roles need to be implemented first
+			$user->addRole( $role = Role::make('ADMIN') );
+			$em->persist( $role );
 		}
-
-		$em = $container->get('doctrine')->getEntityManager();
 		
 		$em->persist($user);
 		$em->flush();

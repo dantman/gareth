@@ -38,6 +38,18 @@ class Project
      */
     private $description;
 
+    /**
+     * @var array $remotes
+     *
+     * @ORM\OneToMany(targetEntity="Remote", mappedBy="project", fetch="EXTRA_LAZY")
+     */
+    private $remotes;
+
+
+    public function __construct() {
+        $this->description = null;
+        $this->remotes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -87,5 +99,25 @@ class Project
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    /**
+     * Add remotes
+     *
+     * @param Gareth\GarethWebBundle\Entity\Remote $remotes
+     */
+    public function addRemote(Remote $remotes)
+    {
+        $this->remotes[] = $remotes;
+    }
+
+    /**
+     * Get remotes
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getRemotes()
+    {
+        return $this->remotes;
     }
 }

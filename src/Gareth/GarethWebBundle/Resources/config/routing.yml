@@ -18,6 +18,8 @@ login:
     defaults:  { _controller: GarethBundle:Security:login }
 login_check:
     pattern:   /login_check
+logout:
+    pattern:   /logout
 
 settings:
     pattern:   /settings
@@ -25,3 +27,6 @@ settings:
 identities:
     pattern:   /settings/identities
     defaults:  { _controller: GarethBundle:Settings:identities }
+my_remotes:
+    pattern:   /settings/remotes
+    defaults:  { _controller: GarethBundle:Settings:remotes }
