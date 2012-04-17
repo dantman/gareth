@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from garethweb.models import User
+from garethweb.models import User, Role
 from optparse import make_option
 
 class Command(BaseCommand):
@@ -21,10 +21,12 @@ class Command(BaseCommand):
 
 		user = User(username=args[0])
 		user.set_password(args[1])
+		user.save()
 
 		if options['admin']:
-			raise CommandError('Sorry --admin is not implemented yet')
+			user.roles.add(Role.make('admin'))
+			user.save()
 
-		user.save()
+
 
 		self.stdout.write("Created user '%s'\n" % user.username)

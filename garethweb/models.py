@@ -30,17 +30,14 @@ class Role(models.Model):
 	Gareth user role for the permissions model.
 	"""
 	role = models.CharField(max_length=20, unique=True)
-	name = models.CharField(max_length=100)
 
 	@staticmethod
 	def make(role, name=None):
 		try:
 			return Role.objects.get(role=role)
 		except ObjectDoesNotExist:
-			pass
-		if name is None:
-			name = role
-		return Role(role=role, name=name)
+			Role(role=role).save()
+		return Role.objects.get(role=role)
 
 	def __unicode__(self):
 		return self.role
