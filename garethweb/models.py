@@ -12,15 +12,13 @@ class Project(models.Model):
 	name = models.CharField(max_length=255, unique=True)
 	description = models.TextField(blank=True)
 
-	def _get_git_path(self):
+	@property
+	def git_path(self):
 		return "%s/%s" % (settings.REPO_PATH, self.name)
 
-	git_path = property(_get_git_path)
-
-	def _get_git(self):
+	@property
+	def git(self):
 		return GarethGit(self.git_path)
-
-	git = property(_get_git)
 
 	def __unicode__(self):
 		return self.name
@@ -54,7 +52,8 @@ class User(models.Model):
 	def __unicode__(self):
 		return self.username
 
-	def _get_rights(self):
+	@property
+	def rights(self):
 		rights = defaultdict(lambda: False)
 		rights['user'] = True
 		if 'user' in settings.ROLE_HIERARCHY:
@@ -67,7 +66,6 @@ class User(models.Model):
 				for hright in settings.ROLE_HIERARCHY[right]:
 					rights[hright] = True
 		return rights
-	rights = property(_get_rights)
 
 	def compare_password(self, password):
 		type, _, auth = self.auth.partition('$')
