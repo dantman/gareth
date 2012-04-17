@@ -1,0 +1,10 @@
+{% extends 'project/layout.html' %}
+{% load url from future %}
+
+{% block title %}Project {{ project.name }}{% endblock %}
+
+{% block page %}
+
+<div class="project-description">{{ project.description }}</div>
+
+{% endblock %}

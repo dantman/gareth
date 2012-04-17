@@ -1,0 +1,47 @@
+{% extends 'settings/layout.html' %}
+{% load url from future %}
+
+{% block title %}Settings{% endblock %}
+
+{% block page %}
+
+<table>
+	<thead>
+		<tr>
+			<th>Email</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th colspan="1" scope=rowgroup>Confirmed</th>
+		</tr>
+{% for identity in identities %}
+		<tr>
+			<td>{{ identity.email }}</td>
+		</tr>
+{% endfor %}
+	</tbody>
+	<tbody>
+		<tr>
+			<th colspan="1" scope=rowgroup>Unconfirmed</th>
+		</tr>
+{% for identity in unconfirmed_identities %}
+		<tr>
+			<td>{{ identity.email }}</td>
+		</tr>
+{% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="1">
+				<form action="{% url 'identities' %}" method="post">
+					{% csrf_token %}
+					{{ add_form.as_p }}
+
+					<input type="submit" value="Register new email">
+				</form>
+			</td>
+	</tfoot>
+</table>
+
+{% endblock %}

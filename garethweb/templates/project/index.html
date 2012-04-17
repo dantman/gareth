@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<table>
+	<thead>
+		<tr>
+			<th>Project Name</th>
+			<th>Project Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for project in projects %}
+		<tr>
+			<td><a href="{% url 'project' name=project.name %}">{{ project.name }}</a></td>
+			<td>{{ project.description }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+{% if user.rights.project_admin %}
+	<tfoot>
+		<tr>
+			<td colspan="2">
+				<a href="{% url 'project_create' %}">Create project</a>
+			</td>
+		</td>
+	</tfoot>
+{% endif %}
+</table>
+
+{% endblock %}

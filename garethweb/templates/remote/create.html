@@ -1,0 +1,15 @@
+{% extends 'project/layout.html' %}
+{% load url from future %}
+
+{% block title %}{% endblock %}
+
+{% block page %}
+
+<form action="{% url 'remote_create' project=project.name %}" method="post">
+	{% csrf_token %}
+	{{ add_form.as_p }}
+
+	<input type="submit" value="Create">
+</form>
+
+{% endblock %}

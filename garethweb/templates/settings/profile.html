@@ -1,0 +1,15 @@
+{% extends 'settings/layout.html' %}
+{% load url from future %}
+
+{% block title %}Settings{% endblock %}
+
+{% block page %}
+
+<table>
+	<tr>
+		<th scope="row">Username</th>
+		<td>{{ user.username }}</td>
+	</tr>
+</table>
+
+{% endblock %}

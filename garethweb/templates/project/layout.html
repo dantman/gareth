@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'projects' %}">Project index</a>
+
+<h1>Project {{ project.name }}</h1>
+
+<ul>
+	<li><a href="{% url 'project_remotes' project=project.name %}">Remotes</a></li>
+{% if user.rights.contributor %}
+	<li><a href="{% url 'remote_create' project=project.name %}">Add remote</a></li>
+{% endif %}
+</ul>
+
+{% block page %}{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'settings/layout.html' %}
+{% load url from future %}
+
+{% block title %}Settings{% endblock %}
+
+{% block page %}
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Project</th>
+			<th>URL</th>
+		</tr>
+	</thead>
+	<tbody>
+{% for remote in remotes %}
+		<tr>
+			<td><a href="{% url 'remote' project=remote.project.name ID=remote.name %}">{{ remote.name }}</a></td>
+			<td><a href="{% url 'project' name=remote.project.name %}">{{ remote.project.name }}</a></td>
+			<td>{{ remote.url }}</td>
+		</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

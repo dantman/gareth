@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'project' name=project.name %}">Back to {{ project.name }} project.</a>
+
+<h1>Remote {{ remote.name }}</h1>
+<dl>
+	<dt>Name</dt>
+	<dd>{{ remote.name }}</dd>
+	<dt>URL</dt>
+	<dd>{{ remote.url }}</dd>
+</dl>
+
+{% endblock %}

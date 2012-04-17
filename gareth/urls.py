@@ -1,17 +1,23 @@
 from django.conf.urls import patterns, include, url
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+urlpatterns = patterns('garethweb.views',
+	# Home
+    url(r'^$', 'home', name='home'),
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'gareth.views.home', name='home'),
-    # url(r'^gareth/', include('gareth.foo.urls')),
+    # Projects
+    url(r'^projects/create$', 'project.create', name='project_create'),
+    url(r'^projects/(?P<name>.+)$', 'project.show', name='project'),
+    url(r'^projects$', 'project.index', name='projects'),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # Remotes
+    url(r'^remotes/(?P<project>.+)/create$', 'remote.create', name='remote_create'),
+    url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})$', 'remote.show', name='remote'),
+    url(r'^remotes/(?P<project>.+)$', 'remote.project', name='project_remotes'),
 
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    # User
+	url(r'^login$', 'auth.login', name='login'),
+	url(r'^logout$', 'auth.logout', name='logout'),
+	url(r'^settings$', 'settings.profile', name='settings'),
+	url(r'^settings/identities$', 'settings.identities', name='identities'),
+	url(r'^settings/remotes$', 'settings.remotes', name='my_remotes'),
 )

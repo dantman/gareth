@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block title %}Create Project{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'projects' %}">Project index</a>
+
+<form action="{% url 'project_create' %}" method="post">
+	{% csrf_token %}
+	{{ add_form.as_p }}
+
+	<input type="submit" value="Create">
+</form>
+
+{% endblock %}

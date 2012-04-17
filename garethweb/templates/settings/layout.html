@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+<h1>Settings</h1>
+
+<ul>
+	<li><a href="{% url 'settings' %}">Profile</a></li>
+	<li><a href="{% url 'identities' %}">Identities</a></li>
+	<li><a href="{% url 'my_remotes' %}">Remotes</a></li>
+</ul>
+
+{% block page %}{% endblock %}
+
+{% endblock %}
