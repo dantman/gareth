@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django import forms
 from garethweb.models import Project, Remote
 from garethweb.decorators import needs_right
@@ -40,7 +40,7 @@ def show(request, project, ID):
 
 def project(request, project):
 	project = get_object_or_404(Project, name=project)
-	remotes = get_list_or_404(Remote, project=project)
+	remotes = Remote.objects.filter(project=project)
 	return render(request, 'remote/project.html', {
 		'project': project,
 		'remotes': remotes,

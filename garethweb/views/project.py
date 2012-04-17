@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.validators import RegexValidator
 from garethweb.decorators import needs_right
 from django import forms
@@ -34,5 +34,5 @@ def show(request, name):
 	return render(request, 'project/show.html', { 'project': project })
 
 def index(request):
-	projects = get_list_or_404(Project)
+	projects = Project.objects.all()
 	return render(request, 'project/index.html', { 'projects': projects })
