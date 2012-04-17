@@ -1,4 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+import django.contrib.messages as m
+from django.http import HttpResponse
 from django import forms
 from garethweb.models import Project, Remote
 from garethweb.decorators import needs_right
@@ -30,13 +34,31 @@ def create(request, project):
 		'add_form': form
 	})
 
-def show(request, project, ID):
-	project = get_object_or_404(Project, name=project)
-	remote = get_object_or_404(Remote, project=project, name=ID)
+def _oneremote(f):
+	def func(request, project, ID, *args, **kwargs):
+		project = get_object_or_404(Project, name=project)
+		remote = get_object_or_404(Remote, project=project, name=ID)
+		return f(request, remote, *args, **kwargs)
+	func.__name__ = f.__name__
+	return func
+
+@_oneremote
+def show(request, remote):
 	return render(request, 'remote/show.html', {
-		'project': project,
+		'project': remote.project,
 		'remote': remote,
 	})
+
+@csrf_exempt # must be first to work
+@_oneremote
+@require_POST
+def fetch(request, remote):
+	remote.queue_fetch()
+	if 'fromui' in request.GET:
+		m.success(request, 'Remote fetch queued')
+		return redirect('remote', project=remote.project.name, ID=remote.name)
+	else:
+		return HttpResponse(status=204)
 
 def project(request, project):
 	project = get_object_or_404(Project, name=project)

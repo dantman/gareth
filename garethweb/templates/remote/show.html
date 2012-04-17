@@ -15,4 +15,8 @@
 	<dd>{{ remote.url }}</dd>
 </dl>
 
+<form action="{% url 'remote_fetch' project=project.name ID=remote.name %}?fromui=1" method="POST">
+<input type="submit" value="Fetch">
+</form>
+
 {% endblock %}

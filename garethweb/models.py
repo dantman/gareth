@@ -113,5 +113,8 @@ class Remote(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	url = models.CharField(max_length=255)
 
+	def queue_fetch(self):
+		pass
+
 	def __unicode__(self):
 		return "%s (%s)" % (self.name, self.url)
