@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from hashlib import sha1
+import uuid
+from django.shortcuts import redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.messages as m
@@ -6,8 +8,7 @@ from django.http import HttpResponse
 from django import forms
 from garethweb.models import Project, Remote
 from garethweb.decorators import needs_right
-import uuid
-from hashlib import sha1
+from garethweb.views.project import ProjectView
 
 class RemoteForm(forms.ModelForm):
 	class Meta:
@@ -29,10 +30,11 @@ def create(request, project):
 			return redirect('remote', project=project.name, ID=remote.name)
 	else:
 		form = RemoteForm()
-	return render(request, 'remote/create.html', {
-		'project': project,
-		'add_form': form
-	})
+	view = ProjectView(request, project, ('remote', 'create'))
+	view.title = ("Add remote to", ('project', project.name))
+	view.set(project=project, add_form=form)
+	view.crumb(Remote(project=project), 'Create')
+	return view()
 
 def _oneremote(f):
 	def func(request, project, ID, *args, **kwargs):
@@ -44,10 +46,11 @@ def _oneremote(f):
 
 @_oneremote
 def show(request, remote):
-	return render(request, 'remote/show.html', {
-		'project': remote.project,
-		'remote': remote,
-	})
+	view = ProjectView(request, remote.project, ('remote', 'show'))
+	view.title = ("Remote", ('remote', remote.name))
+	view.set(project=remote.project, remote=remote)
+	view.crumb(remote)
+	return view()
 
 @csrf_exempt # must be first to work
 @_oneremote
@@ -63,7 +66,8 @@ def fetch(request, remote):
 def project(request, project):
 	project = get_object_or_404(Project, name=project)
 	remotes = Remote.objects.filter(project=project)
-	return render(request, 'remote/project.html', {
-		'project': project,
-		'remotes': remotes,
-	})
+	view = ProjectView(request, project, ('remote', 'project'))
+	view.title = (('project', "%s's" % project.name), "remotes")
+	view.set(project=project, remotes=remotes)
+	view.crumb(Remote(project=project))
+	return view()

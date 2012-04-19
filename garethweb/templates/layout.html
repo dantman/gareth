@@ -4,33 +4,54 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>{% block title %}{% endblock %}</title>
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+		<style>
+		body { padding-top: 60px; }
+		.breadcrumb li:before {
+			color: #999999;
+			padding: 0 5px;
+			content: "/";
+		}
+		.breadcrumb li:first-child:before {
+			display: none;
+		}
+		</style>
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-responsive.css">
 		{% block stylesheets %}{% endblock %}
 	</head>
 	<body>
 
 {% block body %}
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="#">Gareth</a>
+			<div class="nav-collapse">
+				<ul class="nav">
+					<li><a href="{% url 'home' %}">Homepage</a></li>
+					<li><a href="{% url 'projects' %}">Projects</a></li>
+					<li><a href="{% url 'settings' %}">Settings</a></li>
+				{% if user %}
+					<li><a href="{% url 'logout' %}">Logout</a></li>
+				{% else %}
+					<li><a href="{% url 'login' %}">Login</a></li>
+				{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	{% if messages %}
+	<ul class="messages">
+		{% for message in messages %}
+		<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
 
-<ul>
-	<li><a href="{% url 'home' %}">Homepage</a></li>
-	<li><a href="{% url 'projects' %}">Projects</a></li>
-	<li><a href="{% url 'settings' %}">Settings</a></li>
-{% if user %}
-	<li><a href="{% url 'logout' %}">Logout</a></li>
-{% else %}
-	<li><a href="{% url 'login' %}">Login</a></li>
-{% endif %}
-</ul>
-
-{% if messages %}
-<ul class="messages">
-	{% for message in messages %}
-	<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-	{% endfor %}
-</ul>
-{% endif %}
-
-{% block content %}{% endblock %}
-
+	{% block content %}{% endblock %}
+</div>
 {% endblock %}
 
 		{% block javascripts %}{% endblock %}

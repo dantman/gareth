@@ -4,12 +4,17 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+<div class="page-header">
+	<h1>Project {{ project.name }}</h1>
+</div>
 
-<a href="{% url 'projects' %}">Project index</a>
+<ul class="breadcrumb">
+	<li><a href="{% url 'home' %}">Home</a></li>
+	<li><a href="{% url 'projects' %}">Projects</a></li>
+	<li class="active">{{ project.name }}</li>
+</ul>
 
-<h1>Project {{ project.name }}</h1>
-
-<ul>
+<ul class="nav nav-tabs">
 	<li><a href="{% url 'project_remotes' project=project.name %}">Remotes</a></li>
 {% if user.rights.contributor %}
 	<li><a href="{% url 'remote_create' project=project.name %}">Add remote</a></li>

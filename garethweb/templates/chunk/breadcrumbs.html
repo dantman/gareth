@@ -1,0 +1,15 @@
+{% block breadcrumbs %}
+<ul>
+{% for item in breadcrumbs %}
+	{% spaceless %}
+		{% if item.href %}
+			<li>
+				<a href="{{ item.href }}">{{ item.text }}</a>
+			</li>
+		{% else %}
+			<li>{{ item.text }}</li>
+		{% endif %}
+	{% endspaceless %}
+{% endfor %}
+</ul>
+{% endblock %}

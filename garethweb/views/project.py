@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.validators import RegexValidator
-from garethweb.decorators import needs_right
 from django import forms
+from garethweb.pageview import GarethView, navigation
+from garethweb.decorators import needs_right
 from garethweb.models import Project
 
 class ProjectForm(forms.ModelForm):
@@ -27,12 +29,38 @@ def create(request):
 			return redirect('project', name=project.name)
 	else:
 		form = ProjectForm()
-	return render(request, 'project/create.html', { 'add_form': form })
+	view = GarethView(request, ('project', 'create'))
+	view.title = ("Create project",)
+	view.set(add_form=form)
+	view.crumb(Project, 'Create')
+	return view()
+
+class ProjectView(GarethView):
+	def __init__(self, request, project, *args, **kwargs):
+		GarethView.__init__(self, request, *args, **kwargs)
+		self.project = project
+		self.set(project=project)
+		self.crumb(project)
+
+	@property
+	def tabs(self):
+		return (
+			{ 'href': reverse('project', kwargs={ 'name': self.project.name }), 'text': 'Projects' },
+			{ 'href': reverse('project_remotes', kwargs={ 'project': self.project.name }), 'text': 'Remotes' },
+			{ 'href': reverse('remote_create', kwargs={ 'project': self.project.name }), 'text': 'Add remote' },
+		)
 
 def show(request, name):
 	project = get_object_or_404(Project, name=name)
-	return render(request, 'project/show.html', { 'project': project })
+	view = ProjectView(request, project, ('project', 'show'))
+	view.title = ("Project", ('project', project.name))
+	return view()
 
+@navigation('Projects')
 def index(request):
 	projects = Project.objects.all()
-	return render(request, 'project/index.html', { 'projects': projects })
+	view = GarethView(request, ('project', 'index'))
+	view.title = ("Projects",)
+	view.set(projects=projects)
+	view.crumb(Project)
+	return view()

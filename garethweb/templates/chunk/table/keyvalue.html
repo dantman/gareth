@@ -1,0 +1,8 @@
+<table>
+{% for row in table %}
+	<tr>
+		<th scope="row">{{ row.key }}</th>
+		<td>{{ row.value }}</td>
+	</tr>
+{% endfor %}
+</table>

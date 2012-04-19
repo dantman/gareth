@@ -1,0 +1,27 @@
+{% load url from future %}
+{% block navigation %}
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="{% url 'home' %}">Gareth</a>
+			<div class="nav-collapse pull-left">
+				<ul class="nav">
+				{% for item in navigation %}
+					<li><a href="{{ item.href }}">{{ item.text }}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+			<div class="nav-collapse pull-right">
+				<ul class="nav">
+				{% if user %}
+					<li><a href="{% url 'settings' %}">Settings</a></li>
+					<li><a href="{% url 'logout' %}">Logout</a></li>
+				{% else %}
+					<li><a href="{% url 'login' %}">Login</a></li>
+				{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

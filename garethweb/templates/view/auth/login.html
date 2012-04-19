@@ -1,0 +1,18 @@
+{% extends 'chunk:layout' %}
+{% load url from future %}
+{% block page %}
+
+{% if error %}
+    <div>{{ error.message }}</div>
+{% endif %}
+
+{% block form %}
+<form action="{% url 'login' %}" method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+
+	<input type="submit" value="Login">
+</form>
+{% endblock %}
+
+{% endblock %}

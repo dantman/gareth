@@ -1,0 +1,7 @@
+{% extends 'chunk:layout' %}
+{% block page %}
+
+{% url 'remote_create' project=project.name as form_action %}
+{% include 'chunk:form:create' with action=form_action form=add_form %}
+
+{% endblock %}

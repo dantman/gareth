@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from garethweb.pageview import GarethView, navigation
 
+@navigation('Homepage')
 def home(request):
-	return render(request, 'home.html')
+	view = GarethView(request, ('home',))
+	view.title = ()
+	view.crumb('home')
+	return view()

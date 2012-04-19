@@ -4,19 +4,34 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+<div class="page-header">
+	<h1>Remote {{ remote.name }}</h1>
+</div>
 
-<a href="{% url 'project' name=project.name %}">Back to {{ project.name }} project.</a>
+<ul class="breadcrumb">
+	<li><a href="{% url 'home' %}">Home</a></li>
+	<li><a href="{% url 'projects' %}">Projects</a></li>
+	<li><a href="{% url 'project' name=project.name %}">{{ project.name }}</a></li>
+	<li><a href="{% url 'project_remotes' project=project.name %}">Remotes</a></li>
+	<li class="active">Remote</li>
+</ul>
 
-<h1>Remote {{ remote.name }}</h1>
-<dl>
-	<dt>Name</dt>
-	<dd>{{ remote.name }}</dd>
-	<dt>URL</dt>
-	<dd>{{ remote.url }}</dd>
-</dl>
+<table class="table table-striped table-condensed">
+	<tr>
+		<th scope="row">Name</th>
+		<td>{{ remote.name }}</td>
+	</tr>
+	<tr>
+		<th scope="row">URL</th>
+		<td>{{ remote.url }}</td>
+	</tr>
+	<tr>
+		<th scope="row">User</th>
+		<td><a href="#">{{ remote.user.username }}</a></td>
+</table>
 
 <form action="{% url 'remote_fetch' project=project.name ID=remote.name %}?fromui=1" method="POST">
-<input type="submit" value="Fetch">
+<input type="submit" value="Fetch" class="btn btn-inverse">
 </form>
 
 {% endblock %}

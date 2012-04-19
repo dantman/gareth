@@ -1,0 +1,13 @@
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+{% for item in breadcrumbs %}
+	<li{% if item.active %} class="active"{% endif %}>
+		{% if item.href %}
+			<a href="{{ item.href }}">{{ item.text }}</a>
+		{% else %}
+			{{ item.text }}
+		{% endif %}
+	</li>
+{% endfor %}
+</ul>
+{% endblock %}

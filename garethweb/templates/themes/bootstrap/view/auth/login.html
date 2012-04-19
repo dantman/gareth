@@ -1,0 +1,10 @@
+{% extends 'view/auth/login.html' %}
+{% load url from future %}
+{% block form %}
+<form action="{% url 'login' %}" method="post" class="well form-vertical">
+	{% csrf_token %}
+	{{ form.as_p }}
+
+	<input type="submit" value="Login" class="btn btn-primary">
+</form>
+{% endblock %}

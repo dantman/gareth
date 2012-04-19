@@ -1,0 +1,25 @@
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+{% for header in table.headers %}
+			<th>{{ header }}</th>
+{% endfor %}
+		</tr>
+	</thead>
+{% for body in table.bodies %}
+	<tbody>
+{% if body.header %}
+		<tr>
+			<th colspan="1" scope="rowgroup">{{ body.header }}</th>
+		</tr>
+{% endif %}
+{% for row in body.rows %}
+		<tr>
+{% for col in row %}
+			<td>{{ col }}</td>
+{% endfor %}
+		</tr>
+{% endfor %}
+	</tbody>
+{% endfor %}
+</table>

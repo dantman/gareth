@@ -1,0 +1,7 @@
+{% block tabs %}
+<ul>
+{% for item in tabs %}
+	<li><a href="{{ item.href }}">{{ item.text }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

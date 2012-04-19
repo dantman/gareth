@@ -1,0 +1,25 @@
+{% extends 'chunk:layout' %}
+{% load url from future %}
+{% load contextmutate %}
+{% block page %}
+
+{% withtable table %}
+{% appendto table.headers %}Project Name{% endappendto %}
+{% appendto table.headers %}Project Description{% endappendto %}
+{% for project in projects %}
+	{% appendto table.rows as row %}
+		{% appendto row %}<a href="{% url 'project' name=project.name %}">{{ project.name }}</a>{% endappendto %}
+		{% appendto row %}{{ project.description }}{% endappendto %}
+	{% endappendto %}
+{% endfor %}
+{% if user.rights.project_admin %}
+{% set table.footer %}
+	<a href="{% url 'project_create' %}">Create project</a>
+{% endset %}
+{% endif %}
+{% include 'chunk:table:list' with table=table only %}
+{% endwithtable %}
+
+
+
+{% endblock %}

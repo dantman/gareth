@@ -1,0 +1,27 @@
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+{% for header in table.headers %}
+			<th>{{ header }}</th>
+{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+{% for row in table.rows %}
+		<tr>
+{% for col in row %}
+			<td>{{ col }}</td>
+{% endfor %}
+		</tr>
+{% endfor %}
+	</tbody>
+{% if table.footer %}
+	<tfoot>
+		<tr>
+			<td colspan="2">
+				{{ table.footer }}
+			</td>
+		</td>
+	</tfoot>
+{% endif %}
+</table>

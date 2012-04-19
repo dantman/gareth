@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
+from garethweb.pageview import GarethView
 from garethweb.models import User
 
 class LoginForm(forms.Form):
@@ -29,7 +30,11 @@ def login(request):
 	else:
 		form = LoginForm
 
-	return render(request, 'auth/login.html', { 'form': form })
+	view = GarethView(request, ('auth', 'login'))
+	view.title = ("Login",)
+	view.set(form=form)
+	view.crumb('Login')
+	return view()
 
 def logout(request):
 	del request.session['user_id']

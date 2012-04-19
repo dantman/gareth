@@ -1,0 +1,11 @@
+{% extends 'chunk:html' %}
+{% load url from future %}
+{% block body %}
+{% include 'chunk:navigation' %}
+{% include 'chunk:header' %}
+{% include 'chunk:breadcrumbs' %}
+{% if tabs %}
+{% include 'chunk:tabs' %}
+{% endif %}
+{% block page %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'chunk/html.html' %}
+{% load static %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}">
+<style>
+body { padding-top: 60px; }
+.breadcrumb li:before {
+	color: #999999;
+	padding: 0 5px;
+	content: "/";
+}
+.breadcrumb li:first-child:before {
+	display: none;
+}
+</style>
+<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-responsive.css" %}">
+{{ block.super }}
+{% endblock %}

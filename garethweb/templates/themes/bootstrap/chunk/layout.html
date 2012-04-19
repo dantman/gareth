@@ -1,0 +1,13 @@
+{% extends 'chunk:html' %}
+{% load url from future %}
+{% block body %}
+{% include 'chunk:navigation' %}
+<div class="container">
+	{% include 'chunk:header' %}
+	{% include 'chunk:breadcrumbs' %}
+	{% if tabs %}
+	{% include 'chunk:tabs' %}
+	{% endif %}
+	{% block page %}{% endblock %}
+</div>
+{% endblock %}

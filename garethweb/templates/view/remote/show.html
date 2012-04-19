@@ -1,0 +1,26 @@
+{% extends 'chunk:layout' %}
+{% load url from future %}
+{% load contextmutate %}
+{% block page %}
+
+{% withtable @kv table %}
+{% appendto table as @h row %}
+	{% set row.key %}Name{% endset %}
+	{% set row.value %}{{ remote.name }}{% endset %}
+{% endappendto %}
+{% appendto table as @h row %}
+	{% set row.key %}URL{% endset %}
+	{% set row.value %}{{ remote.url }}{% endset %}
+{% endappendto %}
+{% appendto table as @h row %}
+	{% set row.key %}User{% endset %}
+	{% set row.value %}<a href="#">{{ remote.user.username }}</a>{% endset %}
+{% endappendto %}
+{% include 'chunk:table:keyvalue' with table=table only %}
+{% endwithtable %}
+
+<form action="{% url 'remote_fetch' project=project.name ID=remote.name %}?fromui=1" method="POST">
+{% block fetchbutton %}<input type="submit" value="Fetch">{% endblock %}
+</form>
+
+{% endblock %}

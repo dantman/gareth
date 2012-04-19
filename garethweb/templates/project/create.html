@@ -4,14 +4,21 @@
 {% block title %}Create Project{% endblock %}
 
 {% block content %}
+<div class="page-header">
+	<h1>Create project</h1>
+</div>
 
-<a href="{% url 'projects' %}">Project index</a>
+<ul class="breadcrumb">
+	<li><a href="{% url 'home' %}">Home</a></li>
+	<li><a href="{% url 'projects' %}">Projects</a></li>
+	<li class="active">Create</li>
+</ul>
 
-<form action="{% url 'project_create' %}" method="post">
+<form action="{% url 'project_create' %}" method="post" class="well form-vertical">
 	{% csrf_token %}
 	{{ add_form.as_p }}
 
-	<input type="submit" value="Create">
+	<input type="submit" value="Create" class="btn-primary">
 </form>
 
 {% endblock %}

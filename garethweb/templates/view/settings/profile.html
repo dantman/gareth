@@ -1,0 +1,13 @@
+{% extends 'chunk:layout' %}
+{% load contextmutate %}
+{% block page %}
+
+{% withtable @kv table %}
+{% appendto table as @h row %}
+	{% set row.key %}Username{% endset %}
+	{% set row.value %}{{ user.username }}{% endset %}
+{% endappendto %}
+{% include 'chunk:table:keyvalue' with table=table only %}
+{% endwithtable %}
+
+{% endblock %}

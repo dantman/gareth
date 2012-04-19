@@ -1,0 +1,30 @@
+{% extends 'chunk:layout' %}
+{% load url from future %}
+{% load contextmutate %}
+{% block page %}
+
+{% withtable @multibody table %}
+{% appendto table.headers %}Email{% endappendto %}
+{% appendto table.bodies as @body body %}
+	{% set body.header %}Confirmed{% endset %}
+	{% for identity in identities %}
+		{% appendto body.rows as row %}
+			{% appendto row %}{{ identity.email }}{% endappendto %}
+		{% endappendto %}
+	{% endfor %}
+{% endappendto %}
+{% appendto table.bodies as @body body %}
+	{% set body.header %}Unconfirmed{% endset %}
+	{% for identity in unconfirmed_identities %}
+		{% appendto body.rows as row %}
+			{% appendto row %}{{ identity.email }}{% endappendto %}
+		{% endappendto %}
+	{% endfor %}
+{% endappendto %}
+{% include 'chunk:table:multisection' with table=table only %}
+{% endwithtable %}
+
+{% url 'identities' as form_action %}
+{% include 'chunk:form:add' with action=form_action form=add_form submit="Register new email" %}
+
+{% endblock %}

@@ -4,10 +4,11 @@
 {% block title %}Settings{% endblock %}
 
 {% block content %}
+<div class="page-header">
+	<h1>Settings</h1>
+</div>
 
-<h1>Settings</h1>
-
-<ul>
+<ul class="nav nav-tabs">
 	<li><a href="{% url 'settings' %}">Profile</a></li>
 	<li><a href="{% url 'identities' %}">Identities</a></li>
 	<li><a href="{% url 'my_remotes' %}">Remotes</a></li>
