@@ -7,7 +7,7 @@
 			<div class="nav-collapse pull-left">
 				<ul class="nav">
 				{% for item in navigation %}
-					<li><a href="{{ item.href }}">{{ item.text }}</a></li>
+					<li id="nav-{{ item.name }}"{% if item.active %} class="active"{% endif %}><a href="{{ item.href }}">{{ item.text }}</a></li>
 				{% endfor %}
 				</ul>
 			</div>

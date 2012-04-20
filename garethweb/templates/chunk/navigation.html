@@ -1,7 +1,7 @@
 {% block navigation %}
 <ul>
 {% for item in navigation %}
-	<li><a href="{{ item.href }}">{{ item.text }}</a></li>
+	<li id="nav-{{ item.name }}"><a href="{{ item.href }}"{% if item.active %} class="active"{% endif %}>{{ item.text }}</a></li>
 {% endfor %}
 {% if currentuser %}
 	<li><a href="{% url 'settings' %}">Settings</a></li>

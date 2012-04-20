@@ -31,6 +31,7 @@ def login(request):
 		form = LoginForm
 
 	view = GarethView(request, ('auth', 'login'))
+	view.activenav = 'login'
 	view.title = ("Login",)
 	view.set(form=form)
 	view.crumb('Login')

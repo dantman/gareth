@@ -10,7 +10,7 @@
 {% for remote in remotes %}
 	{% appendto table.rows as row %}
 		{% appendto row %}<a href="{% url 'remote' project=remote.project.name ID=remote.name %}">{{ remote.name }}</a>{% endappendto %}
-		{% appendto row %}<a href="">{{ remote.user.username }}</a>{% endappendto %}
+		{% appendto row %}<a href="{% url 'user' username=remote.user.username %}">{{ remote.user.username }}</a>{% endappendto %}
 		{% appendto row %}{{ remote.url }}{% endappendto %}
 	{% endappendto %}
 {% endfor %}

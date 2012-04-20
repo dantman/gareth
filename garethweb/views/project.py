@@ -31,6 +31,7 @@ def create(request):
 		form = ProjectForm()
 	view = GarethView(request, ('project', 'create'))
 	view.title = ("Create project",)
+	view.activenav = 'projects'
 	view.set(add_form=form)
 	view.crumb(Project, 'Create')
 	return view()
@@ -39,28 +40,31 @@ class ProjectView(GarethView):
 	def __init__(self, request, project, *args, **kwargs):
 		GarethView.__init__(self, request, *args, **kwargs)
 		self.project = project
+		self.activenav = 'projects'
 		self.set(project=project)
 		self.crumb(project)
 
 	@property
 	def tabs(self):
 		return (
-			{ 'href': reverse('project', kwargs={ 'name': self.project.name }), 'text': 'Project' },
-			{ 'href': reverse('project_remotes', kwargs={ 'project': self.project.name }), 'text': 'Remotes' },
-			{ 'href': reverse('remote_create', kwargs={ 'project': self.project.name }), 'text': 'Add remote' },
+			{ 'name': 'project', 'href': reverse('project', kwargs={ 'name': self.project.name }), 'text': 'Project' },
+			{ 'name': 'remotes', 'href': reverse('project_remotes', kwargs={ 'project': self.project.name }), 'text': 'Remotes' },
+			{ 'name': 'addremote', 'href': reverse('remote_create', kwargs={ 'project': self.project.name }), 'text': 'Add remote' },
 		)
 
 def show(request, name):
 	project = get_object_or_404(Project, name=name)
 	view = ProjectView(request, project, ('project', 'show'))
 	view.title = ("Project", ('project', project.name))
+	view.activetab = 'project'
 	return view()
 
-@navigation('Projects', 1)
+@navigation('Projects', order=1, key='projects')
 def index(request):
 	projects = Project.objects.all()
 	view = GarethView(request, ('project', 'index'))
 	view.title = ("Projects",)
+	view.activenav = 'projects'
 	view.set(projects=projects)
 	view.crumb(Project)
 	return view()

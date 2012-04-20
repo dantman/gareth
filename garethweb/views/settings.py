@@ -11,20 +11,22 @@ class SettingsView(GarethView):
 	def __init__(self, request, *args, **kwargs):
 		GarethView.__init__(self, request, *args, **kwargs)
 		self.title = ("Settings",)
+		self.activenav = 'settings'
 		self.crumb('Settings')
 		self.set(theuser=request.currentuser)
 
 	@property
 	def tabs(self):
 		return (
-			{ 'href': reverse('settings'), 'text': 'Profile' },
-			{ 'href': reverse('identities'), 'text': 'Identities' },
-			{ 'href': reverse('my_remotes'), 'text': 'Remotes' },
+			{ 'name': 'profile', 'href': reverse('settings'), 'text': 'Profile' },
+			{ 'name': 'identities', 'href': reverse('identities'), 'text': 'Identities' },
+			{ 'name': 'remotes', 'href': reverse('my_remotes'), 'text': 'Remotes' },
 		)
 
 @needs_user
 def profile(request):
 	view = SettingsView(request, ('settings', 'profile'))
+	view.activetab = 'profile'
 	view.crumb('Profile')
 	return view()
 
@@ -57,6 +59,7 @@ def identities(request):
 	else:
 		form = NewEmailForm()
 	view = SettingsView(request, ('settings', 'identities'))
+	view.activetab = 'identities'
 	view.set(
 		identities=user.useremail_set.all(),
 		unconfirmed_identities=user.unconfirmeduseremail_set.all(),
@@ -68,6 +71,7 @@ def identities(request):
 @needs_user
 def remotes(request):
 	view = SettingsView(request, ('settings', 'remotes'))
+	view.activetab = 'remotes'
 	view.set(remotes=request.currentuser.remote_set.all())
 	view.crumb('Remotes')
 	return view()

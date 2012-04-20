@@ -4,6 +4,7 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse, reverse_lazy
 from garethweb.pageview.template import get_template
 from garethweb.models import Project, Remote, User
+import re
 
 # Page breadcrumb handling
 class Breadcrumbs():
@@ -68,10 +69,15 @@ class Breadcrumbs():
 
 # Navigation list
 _navigation = []
-def navigation(name, order=10):
+def navigation(name, order=10, key=None):
 	def _(f):
+		view = "%s.%s" % (f.__module__, f.__name__)
+		thekey = key
+		if not thekey:
+			thekey = re.sub('^garethweb.views.', '', view)
 		_navigation.append({
-			'href': reverse_lazy("%s.%s" % (f.__module__, f.__name__)),
+			'name': thekey,
+			'href': reverse_lazy(view),
 			'text': name,
 			'order': order,
 		})
@@ -87,6 +93,8 @@ class GarethView():
 		self.dict = {}
 		self._breadcrumbs = Breadcrumbs()
 		self.theme = 'bootstrap'
+		self.activenav = None
+		self.activetab = None
 
 	def set(self, *args, **kwargs):
 		for k in kwargs:
@@ -131,7 +139,7 @@ class GarethView():
 
 	@property
 	def tabs(self):
-		return None
+		return ()
 
 	@property
 	def template(self):
@@ -144,8 +152,12 @@ class GarethView():
 		d['page_title'] = self.title_text
 		d['title'] = self.title_html
 		d['breadcrumbs'] = self.breadcrumbs
-		d['navigation'] = self.navigation
-		d['tabs'] = self.tabs
+		d['navigation'] = list(self.navigation)
+		for nav in d['navigation']:
+			nav['active'] = nav.get('name', None) and nav['name'] == self.activenav
+		d['tabs'] = list(self.tabs)
+		for tab in d['tabs']:
+			tab['active'] = tab.get('name', None) and tab['name'] == self.activetab
 		return RequestContext(self.request, d)
 
 	@property

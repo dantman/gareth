@@ -14,7 +14,7 @@
 {% endappendto %}
 {% appendto table as @h row %}
 	{% set row.key %}User{% endset %}
-	{% set row.value %}<a href="#">{{ remote.user.username }}</a>{% endset %}
+	{% set row.value %}<a href="{% url 'user' username=remote.user.username %}">{{ remote.user.username }}</a>{% endset %}
 {% endappendto %}
 {% include 'chunk:table:keyvalue' with table=table only %}
 {% endwithtable %}

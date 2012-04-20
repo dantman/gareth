@@ -32,6 +32,7 @@ def create(request, project):
 		form = RemoteForm()
 	view = ProjectView(request, project, ('remote', 'create'))
 	view.title = ("Add remote to", ('project', project.name))
+	view.activetab = 'addremote'
 	view.set(project=project, add_form=form)
 	view.crumb(Remote(project=project), 'Create')
 	return view()
@@ -48,6 +49,7 @@ def _oneremote(f):
 def show(request, remote):
 	view = ProjectView(request, remote.project, ('remote', 'show'))
 	view.title = ("Remote", ('remote', remote.name))
+	view.activetab = 'remotes'
 	view.set(project=remote.project, remote=remote)
 	view.crumb(remote)
 	return view()
@@ -68,6 +70,7 @@ def project(request, project):
 	remotes = Remote.objects.filter(project=project)
 	view = ProjectView(request, project, ('remote', 'project'))
 	view.title = (('project', "%s's" % project.name), "remotes")
+	view.activetab = 'remotes'
 	view.set(project=project, remotes=remotes)
 	view.crumb(Remote(project=project))
 	return view()

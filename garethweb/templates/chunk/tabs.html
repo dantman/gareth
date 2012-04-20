@@ -1,7 +1,7 @@
 {% block tabs %}
 <ul>
 {% for item in tabs %}
-	<li><a href="{{ item.href }}">{{ item.text }}</a></li>
+	<li><a href="{{ item.href }}"{% if item.active %} class="active"{% endif %}>{{ item.text }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
