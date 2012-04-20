@@ -7,10 +7,10 @@ class needs_right():
 
 	def __call__(self ,f):
 		def func(request, *args, **kwargs):
-			if not request.user:
+			if not request.currentuser:
 				# @todo Reverse target
 				return redirect('login')
-			if not request.user.rights[self.right]:
+			if not request.currentuser.rights[self.right]:
 				# @todo Better error page
 				return HttpResponseForbidden("This page requires the %s right" % self.right)
 			return f(request, *args, **kwargs)

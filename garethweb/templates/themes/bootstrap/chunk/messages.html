@@ -1,0 +1,6 @@
+{% load split %}
+{% block messages %}
+{% for message in messages %}
+<div class="alert{% for tag in message.tags|splitre:"/\s+/" %} alert-{{ tag }}{% endfor %} {{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endblock %}

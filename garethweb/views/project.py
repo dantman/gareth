@@ -56,7 +56,7 @@ def show(request, name):
 	view.title = ("Project", ('project', project.name))
 	return view()
 
-@navigation('Projects')
+@navigation('Projects', 1)
 def index(request):
 	projects = Project.objects.all()
 	view = GarethView(request, ('project', 'index'))

@@ -37,5 +37,6 @@ def login(request):
 	return view()
 
 def logout(request):
-	del request.session['user_id']
+	if 'user_id' in request.session:
+		del request.session['user_id']
 	return redirect('home')

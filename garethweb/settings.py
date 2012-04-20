@@ -37,6 +37,16 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+	"django.core.context_processors.debug",
+	"django.core.context_processors.i18n",
+	"django.core.context_processors.media",
+	"django.core.context_processors.static",
+	"django.core.context_processors.tz",
+	"django.contrib.messages.context_processors.messages",
+	"garethweb.context_processors.auth",
+)
+
 STATICFILES_DIRS = (
 	os.path.dirname( os.path.abspath( __file__ ) ) + '/public',
 )

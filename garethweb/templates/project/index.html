@@ -28,7 +28,7 @@
 		</tr>
 		{% endfor %}
 	</tbody>
-{% if user.rights.project_admin %}
+{% if currentuser.rights.project_admin %}
 	<tfoot>
 		<tr>
 			<td colspan="2">

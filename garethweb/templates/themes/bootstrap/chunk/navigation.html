@@ -13,7 +13,8 @@
 			</div>
 			<div class="nav-collapse pull-right">
 				<ul class="nav">
-				{% if user %}
+				{% if currentuser %}
+					<li><a href="{% url 'profile' %}"><i class="icon-user icon-white"></i> Profile</a></li>
 					<li><a href="{% url 'settings' %}"><i class="icon-cog icon-white"></i> Settings</a></li>
 					<li><a href="{% url 'logout' %}"><i class="icon-off icon-white"></i> Logout</a></li>
 				{% else %}

@@ -3,7 +3,7 @@
 {% for item in navigation %}
 	<li><a href="{{ item.href }}">{{ item.text }}</a></li>
 {% endfor %}
-{% if user %}
+{% if currentuser %}
 	<li><a href="{% url 'settings' %}">Settings</a></li>
 	<li><a href="{% url 'logout' %}">Logout</a></li>
 {% else %}

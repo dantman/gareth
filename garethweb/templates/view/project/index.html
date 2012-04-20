@@ -12,7 +12,7 @@
 		{% appendto row %}{{ project.description }}{% endappendto %}
 	{% endappendto %}
 {% endfor %}
-{% if user.rights.project_admin %}
+{% if currentuser.rights.project_admin %}
 {% set table.footer %}
 	<a href="{% url 'project_create' %}">Create project</a>
 {% endset %}

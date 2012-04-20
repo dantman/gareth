@@ -8,10 +8,11 @@ from garethweb.models import User, UserEmail, UnconfirmedUserEmail
 import os, binascii
 
 class SettingsView(GarethView):
-	def __init__(self, *args, **kwargs):
-		GarethView.__init__(self, *args, **kwargs)
+	def __init__(self, request, *args, **kwargs):
+		GarethView.__init__(self, request, *args, **kwargs)
 		self.title = ("Settings",)
 		self.crumb('Settings')
+		self.set(theuser=request.currentuser)
 
 	@property
 	def tabs(self):
@@ -43,7 +44,7 @@ class NewEmailForm(forms.ModelForm):
 
 @needs_user
 def identities(request):
-	user = request.user
+	user = request.currentuser
 	if request.method == 'POST':
 		form = NewEmailForm(request.POST)
 		if form.is_valid():
@@ -67,6 +68,6 @@ def identities(request):
 @needs_user
 def remotes(request):
 	view = SettingsView(request, ('settings', 'remotes'))
-	view.set(remotes=request.user.remote_set.all())
+	view.set(remotes=request.currentuser.remote_set.all())
 	view.crumb('Remotes')
 	return view()

@@ -23,7 +23,7 @@ def create(request, project):
 		if form.is_valid():
 			remote = form.save(commit=False)
 			remote.project = project
-			remote.user = request.user
+			remote.user = request.currentuser
 			remote.name = sha1( "%s %s %s" % (remote.user.username, remote.url, uuid.uuid4().hex ) ).hexdigest()
 			project.git.add_remote(remote.name, remote.url)
 			remote.save()

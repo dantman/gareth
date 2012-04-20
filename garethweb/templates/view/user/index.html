@@ -1,0 +1,16 @@
+{% extends 'chunk:layout' %}
+{% load url from future %}
+{% load contextmutate %}
+{% block page %}
+
+{% withtable table %}
+{% appendto table.headers %}User{% endappendto %}
+{% for user in users %}
+	{% appendto table.rows as row %}
+		{% appendto row %}<a href="{% url 'user' username=user.username %}">{{ user.username }}</a>{% endappendto %}
+	{% endappendto %}
+{% endfor %}
+{% include 'chunk:table:list' with table=table only %}
+{% endwithtable %}
+
+{% endblock %}

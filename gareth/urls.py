@@ -15,6 +15,11 @@ urlpatterns = patterns('garethweb.views',
     url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})$', 'remote.show', name='remote'),
     url(r'^remotes/(?P<project>.+)$', 'remote.project', name='project_remotes'),
 
+    # Users
+    url(r'^users/(?P<username>.+)$', 'user.profile', name='user'),
+    url(r'^users$', 'user.index', name='users'),
+    url(r'^profile$', 'user.my_profile', name='profile'),
+
     # User
 	url(r'^login$', 'auth.login', name='login'),
 	url(r'^logout$', 'auth.logout', name='logout'),

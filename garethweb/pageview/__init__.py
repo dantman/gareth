@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.utils.html import escape
 from django.core.urlresolvers import reverse, reverse_lazy
 from garethweb.pageview.template import get_template
-from garethweb.models import Project, Remote
+from garethweb.models import Project, Remote, User
 
 # Page breadcrumb handling
 class Breadcrumbs():
@@ -39,6 +39,10 @@ class Breadcrumbs():
 					# Remote with no ID, this is likely a trick we use to add the project remotes
 					# piece to the breadcrumbs
 					pass
+			elif crumb == User:
+				add(name='users', text='Users', href=reverse('users'))
+			elif isinstance(crumb, User):
+				add(name='user', text=crumb.username, href=('user', {'username': crumb.username}))
 			elif type(crumb) == str:
 				add(name=crumb.lower(), text=crumb)
 			else:
@@ -57,6 +61,8 @@ class Breadcrumbs():
 			self.add(Project)
 		elif isinstance(crumb, Remote):
 			self.add(crumb.project)
+		elif isinstance(crumb, User):
+			self.add(User)
 		if crumb not in self._crumbs:
 			self._crumbs.append(crumb)
 
@@ -67,6 +73,7 @@ def navigation(name, order=10):
 		_navigation.append({
 			'href': reverse_lazy("%s.%s" % (f.__module__, f.__name__)),
 			'text': name,
+			'order': order,
 		})
 		return f
 	return _
@@ -117,6 +124,12 @@ class GarethView():
 		return self._breadcrumbs.crumbs
 
 	@property
+	def navigation(self):
+		navigation = list(_navigation)
+		navigation.sort(key=lambda n: n['order'])
+		return navigation
+
+	@property
 	def tabs(self):
 		return None
 
@@ -131,7 +144,7 @@ class GarethView():
 		d['page_title'] = self.title_text
 		d['title'] = self.title_html
 		d['breadcrumbs'] = self.breadcrumbs
-		d['navigation'] = _navigation
+		d['navigation'] = self.navigation
 		d['tabs'] = self.tabs
 		return RequestContext(self.request, d)
 
