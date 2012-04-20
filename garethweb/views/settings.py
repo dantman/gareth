@@ -24,6 +24,7 @@ class SettingsView(GarethView):
 @needs_user
 def profile(request):
 	view = SettingsView(request, ('settings', 'profile'))
+	view.crumb('Profile')
 	return view()
 
 class EmailInput(forms.widgets.TextInput):

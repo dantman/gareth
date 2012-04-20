@@ -14,33 +14,33 @@ class Breadcrumbs():
 	@property
 	def crumbs(self):
 		crumbs = []
-		def add(text, href=None, active=False):
-			d = { 'text': text }
+		def add(name=None, text=None, href=None, active=False):
+			d = { 'name': name, 'text': text }
 			if isinstance(href, tuple):
 				href = reverse(href[0], kwargs=href[1])
 			d['href'] = href
 			d['active'] = active
 			crumbs.append(d)
 
-		add(href=reverse('home'), text='Home')
+		add(name='home', href=reverse('home'), text='Home')
 		if not len(self._crumbs) and not self.home:
-			add(text='???', active=True)
+			add(name='other', text='???', active=True)
 
 		for crumb in self._crumbs:
 			if crumb == Project:
-				add(text='Projects', href=reverse('projects'))
+				add(name='projects', text='Projects', href=reverse('projects'))
 			elif isinstance(crumb, Project):
-				add(text=crumb.name, href=('project', {'name': crumb.name}))
+				add(name='project', text=crumb.name, href=('project', {'name': crumb.name}))
 			elif isinstance(crumb, Remote):
-				add(text='Remotes', href=('project_remotes', {'project': crumb.project}))
+				add(name='remotes', text='Remotes', href=('project_remotes', {'project': crumb.project}))
 				if crumb.name:
-					add(text='Remote', href=('remote', {'project': crumb.project, 'ID': crumb.name}))
+					add(name='remote', text='Remote', href=('remote', {'project': crumb.project, 'ID': crumb.name}))
 				else:
 					# Remote with no ID, this is likely a trick we use to add the project remotes
 					# piece to the breadcrumbs
 					pass
 			elif type(crumb) == str:
-				add(text=crumb)
+				add(name=crumb.lower(), text=crumb)
 			else:
 				raise BaseException("Unknown crumb %s" % crumb)
 
