@@ -1,25 +1,28 @@
 {% load url from future %}
+{% load bootstrap %}
 {% block navigation %}
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
 			<a class="brand" href="{% url 'home' %}">Gareth</a>
-			<div class="nav-collapse pull-left">
+			<div class="pull-left">
 				<ul class="nav">
 				{% for item in navigation %}
-					<li id="nav-{{ item.name }}"{% if item.active %} class="active"{% endif %}><a href="{{ item.href }}">{{ item.text }}</a></li>
+					<li id="nav-{{ item.name }}"{% if item.active %} class="active"{% endif %}><a href="{{ item.href }}">
+						{% icon item.name|maptoicon color="white" %}
+						{{ item.text }}
+					</a></li>
 				{% endfor %}
 				</ul>
 			</div>
-			<div class="nav-collapse pull-right">
+			<div class="pull-right">
 				<ul class="nav">
-				{% if currentuser %}
-					<li><a href="{% url 'profile' %}"><i class="icon-user icon-white"></i> Profile</a></li>
-					<li><a href="{% url 'settings' %}"><i class="icon-cog icon-white"></i> Settings</a></li>
-					<li><a href="{% url 'logout' %}"><i class="icon-off icon-white"></i> Logout</a></li>
-				{% else %}
-					<li><a href="{% url 'login' %}"><i class="icon-user icon-white"></i> Login</a></li>
-				{% endif %}
+				{% for item in personalbar %}
+					<li id="nav-{{ item.name }}"{% if item.active %} class="active"{% endif %}><a href="{{ item.href }}">
+						{% icon item.name|maptoicon color="white" %}
+						{{ item.text }}
+					</a></li>
+				{% endfor %}
 				</ul>
 			</div>
 		</div>

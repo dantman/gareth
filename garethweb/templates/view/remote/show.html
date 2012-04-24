@@ -3,6 +3,34 @@
 {% load contextmutate %}
 {% block page %}
 
+{% if remote.fetchstate %}
+	{% with state=remote.fetchstate %}
+		{% if state.is_completed %}
+			{% if state.is_finished %}
+				<div class="alert alert-info">
+					Last fetch finished at {{ state.completed_at }}.
+				</div>
+			{% else %}
+				<div class="alert alert-error">
+					Last remote fetch failed.
+				</div>
+			{% endif %}
+		{% else %}
+			<div class="alert alert-info alert-block">
+				<p>Remote fetch currently running. Started at {{ state.started_at }}.</p>
+				
+				<div class="progress progress-striped">
+					<div class="bar" style="width: {{ state.progress }}%;"></div>
+				</div>
+			</div>
+		{% endif %}
+	{% endwith %}
+{% else %}
+	<div class="alert">
+		This remote has not yet been fetched.
+	</div>
+{% endif %}
+
 {% withtable @kv table %}
 {% appendto table as @h row %}
 	{% set row.key %}Name{% endset %}
@@ -14,13 +42,9 @@
 {% endappendto %}
 {% appendto table as @h row %}
 	{% set row.key %}User{% endset %}
-	{% set row.value %}<a href="{% url 'user' username=remote.user.username %}">{{ remote.user.username }}</a>{% endset %}
+	{% set row.value %}<a href="{{ remote.user.get_absolute_url }}">{{ remote.user.username }}</a>{% endset %}
 {% endappendto %}
 {% include 'chunk:table:keyvalue' with table=table only %}
 {% endwithtable %}
-
-<form action="{% url 'remote_fetch' project=project.name ID=remote.name %}?fromui=1" method="POST">
-{% block fetchbutton %}<input type="submit" value="Fetch">{% endblock %}
-</form>
 
 {% endblock %}

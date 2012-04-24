@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.template.base import TemplateSyntaxError, Library, Variable, Node, token_kwargs, VARIABLE_ATTRIBUTE_SEPARATOR
+from django.template.base import TemplateSyntaxError, Library, Variable, Node, VARIABLE_ATTRIBUTE_SEPARATOR
 
 register = Library()
 

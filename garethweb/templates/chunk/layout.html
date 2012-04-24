@@ -4,9 +4,8 @@
 {% include 'chunk:navigation' %}
 {% include 'chunk:header' %}
 {% include 'chunk:breadcrumbs' %}
-{% if tabs %}
-{% include 'chunk:tabs' %}
-{% endif %}
+{% if tabs %}{% include 'chunk:tabs' %}{% endif %}
+{% if buttons %}{% include 'chunk:buttons' %}{% endif %}
 {% include 'chunk:messages' %}
 {% block page %}{% endblock %}
 {% endblock %}

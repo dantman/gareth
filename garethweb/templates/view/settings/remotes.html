@@ -9,8 +9,8 @@
 {% appendto table.headers %}URL{% endappendto %}
 {% for remote in remotes %}
 	{% appendto table.rows as row %}
-		{% appendto row %}<a href="{% url 'remote' project=remote.project.name ID=remote.name %}">{{ remote.name }}</a>{% endappendto %}
-		{% appendto row %}<a href="{% url 'project' name=remote.project.name %}">{{ remote.project.name }}</a>{% endappendto %}
+		{% appendto row %}<a href="{{ remote.get_absolute_url }}">{{ remote.name }}</a>{% endappendto %}
+		{% appendto row %}<a href="{{ remote.project.get_absolute_url }}">{{ remote.project.name }}</a>{% endappendto %}
 		{% appendto row %}{{ remote.url }}{% endappendto %}
 	{% endappendto %}
 {% endfor %}

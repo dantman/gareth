@@ -8,7 +8,7 @@
 {% appendto table.headers %}Project Description{% endappendto %}
 {% for project in projects %}
 	{% appendto table.rows as row %}
-		{% appendto row %}<a href="{% url 'project' name=project.name %}">{{ project.name }}</a>{% endappendto %}
+		{% appendto row %}<a href="{{ project.get_absolute_url }}">{{ project.name }}</a>{% endappendto %}
 		{% appendto row %}{{ project.description }}{% endappendto %}
 	{% endappendto %}
 {% endfor %}

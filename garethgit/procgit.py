@@ -6,11 +6,15 @@ class ProcGit():
 	git_dir = None
 	command = None
 	args = None
+	stdout = None
+	stderr = None
 
-	def __init__(self, command=None, args=[], git_dir=None):
+	def __init__(self, command=None, args=(), stdout=None, stderr=None, git_dir=None):
 		self.command = command
 		self.args = args
 		self.git_dir = git_dir
+		self.stdout = stdout
+		self.stderr = stderr
 
 	def run(self):
 		args = ['git', self.command]
@@ -19,11 +23,9 @@ class ProcGit():
 		if self.git_dir:
 			env['GIT_DIR'] = self.git_dir
 		p = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.git_dir, env=env)
-
 		rlist = [p.stderr, p.stdout]
 		wlist = []
 		xlist = []
-
 
 		while len(rlist) > 0 or len(wlist) > 0:
 			try:
@@ -32,25 +34,26 @@ class ProcGit():
 				break
 
 			if p.stderr in r:
-				chunk = p.stderr.read()
+				chunk = p.stderr.read(256)
 				if chunk:
 					# @fixme Do something with the error data
-					pass
+					if self.stderr:
+						self.stderr(chunk)
 				else:
 					p.stderr.close()
 					rlist.remove(p.stderr)
 
 			if p.stdout in r:
-				chunk = p.stdout.read()
+				chunk = p.stdout.read(256)
 				if chunk:
-					# @fixme Do something with the error data
-					pass
+					if self.stdout:
+						self.stdout(chunk)
 				else:
 					p.stdout.close()
 					rlist.remove(p.stdout)
 
-			p.wait()
-			self._exit_code = p.returncode
+		p.wait()
+		self._exit_code = p.returncode
 
 	def exit_code(self):
 		self.run()

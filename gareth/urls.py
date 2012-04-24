@@ -12,6 +12,7 @@ urlpatterns = patterns('garethweb.views',
     # Remotes
     url(r'^remotes/(?P<project>.+)/create$', 'remote.create', name='remote_create'),
     url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})/fetch$', 'remote.fetch', name='remote_fetch'),
+    url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})/delete$', 'remote.delete', name='remote_delete'),
     url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})$', 'remote.show', name='remote'),
     url(r'^remotes/(?P<project>.+)$', 'remote.project', name='project_remotes'),
 

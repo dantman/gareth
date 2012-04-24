@@ -1,0 +1,17 @@
+{% load bootstrap %}
+{% block buttons %}
+<div class="pull-right">
+{% for item in buttons %}
+	{% if item.method %}
+	<form action="{{ item.href }}" method="{{ item.method }}" class="form-inline" style="display: inline;">
+		{% for k, v in item.data %}
+		<input type="hidden" name="{{ k }}" value="{{ v }}">
+		{% endfor %}
+		<button type="submit" class="{{ item.name|btnclass }}">{% icon item.name|maptoicon color="white" after=" " %}{{ item.text }}</button>
+	</form>
+	{% else %}
+	<a href="{{ item.href }}" class="{{ item.name|btnclass }}">{% icon item.name|maptoicon color="white" after=" " %}{{ item.text }}</a>
+	{% endif %}
+{% endfor %}
+</div>
+{% endblock %}

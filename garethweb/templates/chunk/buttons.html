@@ -1,0 +1,18 @@
+{% block buttons %}
+<ul>
+{% for item in buttons %}
+	<li>
+		{% if item.method %}
+		<form action="{{ item.href }}" method="{{ item.method }}">
+			{% for k, v in item.data %}
+			<input type="hidden" name="{{ k }}" value="{{ v }}">
+			{% endfor %}
+			<input type="submit" value="{{ item.text }}">
+		</form
+		{% else %}
+		<a href="{{ item.href }}">{{ item.text }}</a>
+		{% endif %}
+	</li>
+{% endfor %}
+</ul>
+{% endblock %}

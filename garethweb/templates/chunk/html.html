@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -7,6 +8,8 @@
 	</head>
 	<body>
 {% block body %}{% endblock %}
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+<script src="{% static "js/jquery-1.7.2.min.js" %}"></script>
+{% endblock %}
 	</body>
 </html>

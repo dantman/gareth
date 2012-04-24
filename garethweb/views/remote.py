@@ -1,6 +1,7 @@
 from hashlib import sha1
 import uuid
 from django.shortcuts import redirect, get_object_or_404
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.messages as m
@@ -9,6 +10,9 @@ from django import forms
 from garethweb.models import Project, Remote
 from garethweb.decorators import needs_right
 from garethweb.views.project import ProjectView
+
+class DeleteConfirmForm(forms.Form):
+	pass
 
 class RemoteForm(forms.ModelForm):
 	class Meta:
@@ -51,7 +55,27 @@ def show(request, remote):
 	view.title = ("Remote", ('remote', remote.name))
 	view.activetab = 'remotes'
 	view.set(project=remote.project, remote=remote)
+	view.add_button(href=reverse('remote_fetch', kwargs={ 'project': remote.project.name, 'ID': remote.name }) + "?fromui=1", post=True, text='Fetch')
+	if remote.user == request.currentuser:
+		view.add_button(href=reverse('remote_delete', kwargs={ 'project': remote.project.name, 'ID': remote.name }), text='Delete')
 	view.crumb(remote)
+	return view()
+
+@_oneremote
+def delete(request, remote):
+	if request.method == 'POST':
+		form = DeleteConfirmForm(request.POST)
+		if form.is_valid():
+			remote.delete()
+			return redirect('project_remotes', project=remote.project.name)
+	else:
+		form = DeleteConfirmForm()
+	view = ProjectView(request, remote.project, ('remote', 'delete'))
+	view.title = ("Delete remote", ('remote', remote.name))
+	view.activetab = 'remotes'
+	view.set(project=remote.project, remote=remote, form=form)
+	view.crumb(remote)
+	view.crumb('Delete')
 	return view()
 
 @csrf_exempt # must be first to work

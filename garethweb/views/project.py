@@ -61,7 +61,7 @@ def show(request, name):
 
 @navigation('Projects', order=1, key='projects')
 def index(request):
-	projects = Project.objects.all()
+	projects = Project.objects.order_by('name')
 	view = GarethView(request, ('project', 'index'))
 	view.title = ("Projects",)
 	view.activenav = 'projects'

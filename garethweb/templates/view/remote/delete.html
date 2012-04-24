@@ -1,0 +1,9 @@
+{% extends 'chunk:layout' %}
+{% load url from future %}
+{% block page %}
+
+{% url 'remote_delete' project=remote.project.name ID=remote.name as form_action %}
+{% url 'remote' project=remote.project.name ID=remote.name as cancel %}
+{% include 'chunk:form:deleteconfirm' with action=form_action cancel=cancel form=form %}
+
+{% endblock %}

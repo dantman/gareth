@@ -7,7 +7,7 @@
 {% appendto table.headers %}User{% endappendto %}
 {% for user in users %}
 	{% appendto table.rows as row %}
-		{% appendto row %}<a href="{% url 'user' username=user.username %}">{{ user.username }}</a>{% endappendto %}
+		{% appendto row %}<a href="{{ user.get_absolute_url }}">{{ user.username }}</a>{% endappendto %}
 	{% endappendto %}
 {% endfor %}
 {% include 'chunk:table:list' with table=table only %}

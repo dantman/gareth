@@ -7,7 +7,7 @@ def profile(request, username):
 	user = get_object_or_404(User, username=username)
 	view = GarethView(request, ('user', 'profile'))
 	view.title = ("User", ('user', user.username))
-	view.activenav = 'users'
+	view.activenav = ('users', 'user-%s' % user.username)
 	view.set(theuser=user)
 	view.crumb(user)
 	return view()
@@ -18,7 +18,7 @@ def my_profile(request):
 
 @navigation('Users', order=25, key='users')
 def index(request):
-	users = User.objects.all()
+	users = User.objects.order_by('username')
 	view = GarethView(request, ('user', 'index'))
 	view.title = ("Users",)
 	view.activenav = 'users'

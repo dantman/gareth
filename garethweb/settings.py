@@ -8,6 +8,7 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
     'django.contrib.staticfiles',
 	'garethweb',
+	'south', # Database migrations
 )
 
 MIDDLEWARE_CLASSES = (

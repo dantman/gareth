@@ -16,3 +16,7 @@ body { padding-top: 60px; }
 <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-responsive.css" %}">
 {{ block.super }}
 {% endblock %}
+{% block javascripts %}
+{{ block.super }}
+<script src="{% static "themes/bootstrap/js/bootstrap-alert.js" %}"></script>
+{% endblock %}

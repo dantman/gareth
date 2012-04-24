@@ -1,30 +1,9 @@
+{% load bootstrap %}
 {% block breadcrumbs %}
 <ul class="breadcrumb">
 {% for item in breadcrumbs %}
 	<li{% if item.active %} class="active"{% endif %}>
-		{% if item.name == 'home' %}
-		<i class="icon-home"></i>
-		{% elif item.name == 'settings' %}
-		<i class="icon-cog"></i>
-		{% elif item.name == 'projects' %}
-		<i class="icon-list"></i>
-		{% elif item.name == 'project' %}
-		<i class="icon-leaf"></i>
-		{% elif item.name == 'remotes' %}
-		<i class="icon-list"></i>
-		{% elif item.name == 'remote' %}
-		<i class="icon-download-alt"></i>
-		{% elif item.name == 'users' %}
-		<i class="icon-list"></i>
-		{% elif item.name == 'user' %}
-		<i class="icon-user"></i>
-		{% elif item.name == 'profile' %}
-		<i class="icon-user"></i>
-		{% elif item.name == 'identities' %}
-		<i class="icon-envelope"></i>
-		{% elif item.name == 'create' %}
-		<i class="icon-plus"></i>
-		{% endif %}
+		{% icon item.name|maptoicon:"crumbs" %}
 		{% if item.href %}
 			<a href="{{ item.href }}">{{ item.text }}</a>
 		{% else %}

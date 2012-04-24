@@ -92,6 +92,7 @@ class GarethView():
 		self.page = page
 		self.dict = {}
 		self._breadcrumbs = Breadcrumbs()
+		self.buttons = []
 		self.theme = 'bootstrap'
 		self.activenav = None
 		self.activetab = None
@@ -133,13 +134,41 @@ class GarethView():
 
 	@property
 	def navigation(self):
-		navigation = list(_navigation)
-		navigation.sort(key=lambda n: n['order'])
-		return navigation
+		navi = []
+		for nav in _navigation:
+			navi.append(nav.copy())
+		navi.sort(key=lambda n: n['order'])
+		return navi
+
+	@property
+	def personalbar(self):
+		if self.request.currentuser:
+			return [
+				{ 'name': 'profile', 'active': ('user-%s' % self.request.currentuser.username), 'href': reverse('profile'), 'text': 'Profile' },
+				{ 'name': 'settings', 'href': reverse('settings'), 'text': 'Settings' },
+				{ 'name': 'logout', 'href': reverse('logout'), 'text': 'Logout' },
+			]
+		else:
+			return [
+				{ 'name': 'login', 'href': reverse('login'), 'text': 'Login' },
+			]
 
 	@property
 	def tabs(self):
 		return ()
+
+	def add_button(self, href=None, post=False, text=None, name=None):
+		b = {}
+		if not name:
+			name = text.lower()
+		b['href'] = href
+		b['text'] = text
+		b['name'] = name
+		if post:
+			b['method'] = 'POST'
+			if isinstance(post, dict):
+				b['data'] = post
+		self.buttons.append(b)
 
 	@property
 	def template(self):
@@ -148,16 +177,35 @@ class GarethView():
 
 	@property
 	def context(self):
+		def isactive(d, active):
+			if type(active) == str:
+				active = (active,)
+			name = d.get('name', None)
+			if d.get('active', None) == True:
+				return True 
+			if name in active:
+				return True
+			a = d.get('active', None)
+			if a:
+				return len([x for x in active if x in a]) > 0
+			return False
+
 		d = self.dict.copy()
 		d['page_title'] = self.title_text
-		d['title'] = self.title_html
+		d['title_html'] = self.title_html
 		d['breadcrumbs'] = self.breadcrumbs
-		d['navigation'] = list(self.navigation)
+		d['navigation'] = self.navigation
 		for nav in d['navigation']:
-			nav['active'] = nav.get('name', None) and nav['name'] == self.activenav
-		d['tabs'] = list(self.tabs)
-		for tab in d['tabs']:
-			tab['active'] = tab.get('name', None) and tab['name'] == self.activetab
+			nav['active'] = isactive(nav, self.activenav)
+		d['personalbar'] = self.personalbar
+		for bar in d['personalbar']:
+			bar['active'] = isactive(bar, self.activenav)
+		d['tabs'] = []
+		for origtab in self.tabs:
+			tab = origtab.copy()
+			tab['active'] = isactive(tab, self.activetab)
+			d['tabs'].append(tab)
+		d['buttons'] = self.buttons
 		return RequestContext(self.request, d)
 
 	@property

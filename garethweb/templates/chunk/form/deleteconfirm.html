@@ -1,0 +1,11 @@
+<form action="{{ action }}" method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+
+	<p>Are you sure you wish to delete this?</p>
+
+	{% if cancel %}
+	<a href="{{ cancel }}">Cancel</a>
+	{% endif %}
+	<input type="submit" value="{{ submit|default:"Delete" }}">
+</form>

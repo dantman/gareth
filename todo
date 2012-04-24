@@ -1,0 +1,3 @@
+* Add repo remote url normalizations
+** Do it with a list, so we can plug in user specified ones
+** Add a default one for GitHub: Normalize everything to https: (ssh, http, https, and git) and strip out the user@

@@ -3,11 +3,8 @@
 {% for item in navigation %}
 	<li id="nav-{{ item.name }}"><a href="{{ item.href }}"{% if item.active %} class="active"{% endif %}>{{ item.text }}</a></li>
 {% endfor %}
-{% if currentuser %}
-	<li><a href="{% url 'settings' %}">Settings</a></li>
-	<li><a href="{% url 'logout' %}">Logout</a></li>
-{% else %}
-	<li><a href="{% url 'login' %}">Login</a></li>
+{% for item in personalbar %}
+	<li id="nav-{{ item.name }}"><a href="{{ item.href }}"{% if item.active %} class="active"{% endif %}>{{ item.text }}</a></li>
 {% endif %}
 </ul>
 {% endblock %}
