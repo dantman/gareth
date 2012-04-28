@@ -1,10 +1,23 @@
 from subprocess import Popen, PIPE
 from select import select
 from select import error as SelectError
+import re
 
 def collect_chunks(buffer):
 	def handler(chunk):
 		buffer.extend(chunk)
+	return handler
+
+def collect_list(list):
+	buffer = bytearray('')
+	def handler(chunk):
+		buffer.extend(chunk)
+		while True:
+			m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", buffer)
+			if not m:
+				break
+			list.append(str(m.group(1)))
+			buffer[:len(m.group(0))] = ''
 	return handler
 
 class ProcGit():
@@ -73,3 +86,9 @@ class ProcGit():
 		if self.exit_ok():
 			return str(output).rstrip()
 		return None
+
+	def return_list(self):
+		output = []
+		self.stdout = collect_list(output)
+		self.run()
+		return output

@@ -44,17 +44,24 @@
 	{% set row.key %}User{% endset %}
 	{% set row.value %}<a href="{{ remote.user.get_absolute_url }}">{{ remote.user.username }}</a>{% endset %}
 {% endappendto %}
-{% appendto table as @h row %}
-	{% set row.key %}Branches{% endset %}
-	{% set row.value %}
-		<ul>
-		{% for branch in remote.branches %}
-			<li>{{ branch.name }} ({{ branch.sha1 }})</li>
-		{% endfor %}
-		</ul>
-	{% endset %}
-{% endappendto %}
 {% include 'chunk:table:keyvalue' with table=table only %}
 {% endwithtable %}
+
+{% for branch in remote.branches %}
+	<h3>{{ branch.name }} ({{ branch.sha1 }})</h3>
+	{% with unreviewed=branch.unreviewed %}
+		{% if unreviewed %}
+		<ul>
+			{% for commit in unreviewed %}
+			<li>{{ commit.sha1 }}</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			<p>There are no new commits in this branch to be reviewed.</p>
+		{% endif %}
+	{% endwith %}
+{% empty %}
+	<p>This remote has no fetched branches.</p>
+{% endfor %}
 
 {% endblock %}

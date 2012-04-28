@@ -9,13 +9,9 @@ class GarethGitRef():
 	def __init__(self, git, ref, name=None):
 		self.git = git
 		self.ref = ref
-		self._name = name
-
-	@property
-	def name(self):
-		if self._name:
-			return self._name
-		return self.ref
+		if not name:
+			name = ref
+		self.name = name
 
 	def __unicode__(self):
 		return self.name
@@ -40,6 +36,24 @@ class GarethGitRef():
 			ref = ref.symbolic
 		return ref.content
 
+class GarethGitRemoteBranch(GarethGitRef):
+	def __init__(self, git, remote, branch, name=None):
+		if not name:
+			name = branch
+		GarethGitRef.__init__(self, git, "refs/remotes/%s/%s" % (remote, branch), name)
+
+	@property
+	def unreviewed(self):
+		return self.git.unmerged_commits(self.ref)
+
+class GarethGitCommit():
+	def __init__(self, git, sha1):
+		self.git = git
+		self.sha1 = sha1
+
+	def __unicode__(self):
+		return self.sha1
+
 class GarethGit():
 	path = None
 	def __init__(self, path):
@@ -56,6 +70,12 @@ class GarethGit():
 
 	def ref_obj(self, ref, name=None):
 		return GarethGitRef(self, ref, name)
+
+	def commit_obj(self, sha1):
+		return GarethGitCommit(self, sha1)
+
+	def remotebranch_obj(self, remote, branch, name=None):
+		return GarethGitRemoteBranch(self, remote, branch, name)
 
 	def get_symbolic_ref(self, ref):
 		return ProcGit(
@@ -117,7 +137,7 @@ class GarethGit():
 		).exit_ok()
 		if not ok:
 			return None
-		return st.branches
+		return [self.remotebranch_obj(name, branch) for branch in st.branches]
 
 	def fetch(self, remote, progress=None):
 		def handle_line(line, eol):
@@ -143,8 +163,8 @@ class GarethGit():
 				m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", output)
 				if not m:
 					break
-				output[:len(m.group(0))] = ''
 				handle_line(m.group(1), m.group(2))
+				output[:len(m.group(0))] = ''
 
 		return ProcGit(
 			command='fetch',
@@ -152,3 +172,13 @@ class GarethGit():
 			stderr=stderr,
 			git_dir=self.path
 		).exit_ok()
+
+	def unmerged_commits(self, ref=None, remote=None, branch=None):
+		if not ref:
+			ref = "refs/remotes/%s/%s" % (remote, branch)
+		revs = ProcGit(
+			command='rev-list',
+			args=(ref, '--not', '--glob', 'refs/heads/*', '--glob', 'refs/review-heads/*'),
+			git_dir=self.path
+		).return_list()
+		return [self.commit_obj(rev) for rev in revs]
