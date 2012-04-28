@@ -44,6 +44,16 @@
 	{% set row.key %}User{% endset %}
 	{% set row.value %}<a href="{{ remote.user.get_absolute_url }}">{{ remote.user.username }}</a>{% endset %}
 {% endappendto %}
+{% appendto table as @h row %}
+	{% set row.key %}Branches{% endset %}
+	{% set row.value %}
+		<ul>
+		{% for branch in remote.branches %}
+			<li>{{ branch }}</li>
+		{% endfor %}
+		</ul>
+	{% endset %}
+{% endappendto %}
 {% include 'chunk:table:keyvalue' with table=table only %}
 {% endwithtable %}
 

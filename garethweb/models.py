@@ -171,6 +171,10 @@ class Remote(models.Model):
 	url = models.CharField(max_length=255)
 	fetchstate = models.OneToOneField(RemoteFetch, null=True)
 
+	@property
+	def branches(self):
+		return self.project.git.remote_branches(self.name)
+
 	def queue_fetch(self):
 		pass
 

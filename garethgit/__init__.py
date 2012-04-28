@@ -1,6 +1,9 @@
 from garethgit.procgit import ProcGit
 import re
 
+class State():
+	pass
+
 class GarethGit():
 	path = None
 	def __init__(self, path):
@@ -26,12 +29,48 @@ class GarethGit():
 			git_dir=self.path
 		).exit_ok()
 
-	def fetch(self, remote, progress=None):
-		def escape(s):
-			s = re.sub("\r\n|\r|\n", lambda m: m.group(0).replace("\r", "\\\\r").replace("\n", "\\\\n") + "\n", s)
-			r = re.compile('[^-_()\[\]\{\}~`!@#$%^&*+=:;?/|\\\\\'".,<>a-zA-Z0-9\r\n \t]')
-			return r.sub(lambda m: hex(ord(m.group(0))), s)
+	def remote_branches(self, name):
+		st = State()
+		st.branches = []
+		st.section = None
+		def handle_line(line, eol):
+			line = re.sub('^[* ] ', '', line)
+			m = re.match('^( *)(.*)$', line)
+			if not m:
+				return
+			spaces = m.group(1)
+			line = m.group(2)
+			if len(spaces) == 0:
+				if re.match('^Remote branches:', line):
+					st.section = 'branches'
+				else:
+					st.section = None
+			elif st.section == 'branches':
+				st.branches.append(line)
 
+		output = bytearray('')
+		def stdout(chunk):
+			output.extend(chunk)
+			while True:
+				m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", output)
+				if not m:
+					break
+				# Handle a line (Must be first, if you shift data first this will break)
+				handle_line(str(m.group(1)), str(m.group(2)))
+				# Shift out the line that we handled
+				output[:len(m.group(0))] = ''
+
+		ok = ProcGit(
+			command='remote',
+			args=('show', '-n', name),
+			stdout=stdout,
+			git_dir=self.path
+		).exit_ok()
+		if not ok:
+			return None
+		return st.branches
+
+	def fetch(self, remote, progress=None):
 		def handle_line(line, eol):
 			if not progress:
 				return
@@ -52,7 +91,7 @@ class GarethGit():
 		def stderr(chunk):
 			output.extend(chunk)
 			while True:
-				m = re.match("^([^\r\n]*)(\r\n|\r|\n)", output)
+				m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", output)
 				if not m:
 					break
 				output[:len(m.group(0))] = ''

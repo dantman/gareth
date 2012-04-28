@@ -34,7 +34,7 @@ class ProcGit():
 				break
 
 			if p.stderr in r:
-				chunk = p.stderr.read(256)
+				chunk = p.stderr.read(1024)
 				if chunk:
 					# @fixme Do something with the error data
 					if self.stderr:
@@ -44,7 +44,7 @@ class ProcGit():
 					rlist.remove(p.stderr)
 
 			if p.stdout in r:
-				chunk = p.stdout.read(256)
+				chunk = p.stdout.read(1024)
 				if chunk:
 					if self.stdout:
 						self.stdout(chunk)
