@@ -182,7 +182,7 @@ class Remote(models.Model):
 		state = RemoteFetch()
 		state.save()
 		if self.fetchstate:
-			self.fetchstate.remove()
+			self.fetchstate.delete()
 		self.fetchstate = state
 		self.save()
 		def handle_progress(event, p):
