@@ -4,17 +4,17 @@ urlpatterns = patterns('garethweb.views',
 	# Home
     url(r'^$', 'home', name='home'),
 
-    # Projects
-    url(r'^projects/create$', 'project.create', name='project_create'),
-    url(r'^projects/(?P<name>.+)$', 'project.show', name='project'),
-    url(r'^projects$', 'project.index', name='projects'),
-
     # Remotes
-    url(r'^remotes/(?P<project>.+)/create$', 'remote.create', name='remote_create'),
-    url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})/fetch$', 'remote.fetch', name='remote_fetch'),
-    url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})/delete$', 'remote.delete', name='remote_delete'),
-    url(r'^remotes/(?P<project>.+)/(?P<ID>[0-9a-fA-F]{40})$', 'remote.show', name='remote'),
-    url(r'^remotes/(?P<project>.+)$', 'remote.project', name='project_remotes'),
+    url(r'^p/(?P<project>.+).git/remotes/create$', 'remote.create', name='remote_create'),
+    url(r'^p/(?P<project>.+).git/remotes/(?P<ID>[0-9a-fA-F]{40})/fetch$', 'remote.fetch', name='remote_fetch'),
+    url(r'^p/(?P<project>.+).git/remotes/(?P<ID>[0-9a-fA-F]{40})/delete$', 'remote.delete', name='remote_delete'),
+    url(r'^p/(?P<project>.+).git/remotes/(?P<ID>[0-9a-fA-F]{40})$', 'remote.show', name='remote'),
+    url(r'^p/(?P<project>.+).git/remotes$', 'remote.project', name='project_remotes'),
+
+    # Projects
+    url(r'^p/create$', 'project.create', name='project_create'),
+    url(r'^p/(?P<name>.+).git$', 'project.show', name='project'),
+    url(r'^p$', 'project.index', name='projects'),
 
     # Users
     url(r'^users/(?P<username>.+)$', 'user.profile', name='user'),
