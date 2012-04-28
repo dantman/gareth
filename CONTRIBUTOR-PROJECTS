@@ -1,0 +1,19 @@
+Gareth is going to be a large project with many separate areas. If you're looking for something isolated you can jump into and start writing while others try to get the primary portions of the project working. Here is a list of projects Gareth needs people to start working on.
+
+== Queueing System ==
+The fetch system needs a job queueing system. Fetches should not be implemented inside of a web request itself. A fetch request should be added to the queue. After that it will be picked up by either a separate thread or long running command daemon dedicated to taking queue requests and acting on them.
+
+== Fetch progress updates ==
+The fetch system needs a way for clients to watch the progress of a fetch and update the progress bar on clients sitting on a remote's page.
+
+gevent did not want to easily install on my mac so I don't want to jump into trying to use that server for web sockets. Take a look into the tornado webserver. It is a python webserver and also supports WebSockets:
+https://github.com/facebook/tornado/blob/master/tornado/websocket.py
+http://lincolnloop.com/blog/2009/sep/15/using-django-inside-tornado-web-server/
+
+Start by implementing a replacement for the normal WSGI, making it so that our django runs fully under tornado. Then add in a WebSocket handler for fetches and write some client side code to abstractly watch the progress of a specific remote's fetches.
+
+Once that is done start on the theme parts. The current bootstrap stuff hardcoded into the default templates should be turned into a proper abstract setup just like the rest of the templates are. After that a theme.js should be written. The intent is that every theme should have a theme.js layer which like templates tells Gareth the specific way that it should behave in a theme. In this case a method should be hooked in that takes information about the current progress in and then updates the fetch notice in a theme specific way. In this case updating the progress bar and potentially text of the notice. Essentially this becomes a layer telling Gareth how it should behave for certain actions in a theme.
+
+Note that for the bootstrap theme the js should also add an 'active' class to the progress bar. Bootstrap is supposed to have an animation when this is on (may need some troubleshooting). So it's a good user experience for us to have a static progress bar in browsers without WebSockets and an animating progress bar when we have js actively tracking the progress and updating the bar.
+
+For the server side aspect of watching fetches the first implementation should naturally work by continually polling the database for changes. It can probably do this a little more efficiently by keeping a list of what remotes currently connected clients want to be updated about and polls for updates all at once with a single select using an IN. In the future some better implementations may be written. For single server setups a default using a multithredded queue where fetch jobs continually poke the queue about updates and the websocket implementation watches that should work. For more complecated setups an implementation that allows you to configure a message broker should be implemented.
