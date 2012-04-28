@@ -2,6 +2,11 @@ from subprocess import Popen, PIPE
 from select import select
 from select import error as SelectError
 
+def collect_chunks(buffer):
+	def handler(chunk):
+		buffer.extend(chunk)
+	return handler
+
 class ProcGit():
 	git_dir = None
 	command = None
@@ -61,3 +66,10 @@ class ProcGit():
 
 	def exit_ok(self):
 		return self.exit_code() == 0
+
+	def ok_line(self):
+		output = bytearray('')
+		self.stdout = collect_chunks(output)
+		if self.exit_ok():
+			return str(output).rstrip()
+		return None

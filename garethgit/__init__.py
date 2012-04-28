@@ -1,8 +1,44 @@
 from garethgit.procgit import ProcGit
+import os.path
 import re
 
 class State():
 	pass
+
+class GarethGitRef():
+	def __init__(self, git, ref, name=None):
+		self.git = git
+		self.ref = ref
+		self._name = name
+
+	@property
+	def name(self):
+		if self._name:
+			return self._name
+		return self.ref
+
+	def __unicode__(self):
+		return self.name
+
+	@property
+	def symbolic(self):
+		ref = self.git.get_symbolic_ref(self.ref)
+		if ref:
+			return self.git.ref_obj(ref)
+		return None
+
+	@property
+	def content(self):
+		with open(self.git.rel_path(self.ref), 'r') as f:
+			return f.read().rstrip()
+		return None
+
+	@property
+	def sha1(self):
+		ref = self
+		while ref.symbolic:
+			ref = ref.symbolic
+		return ref.content
 
 class GarethGit():
 	path = None
@@ -14,6 +50,19 @@ class GarethGit():
 			command='init',
 			args=('--bare', '--', self.path)
 		).exit_ok()
+
+	def rel_path(self, name):
+		return os.path.join(self.path, name)
+
+	def ref_obj(self, ref, name=None):
+		return GarethGitRef(self, ref, name)
+
+	def get_symbolic_ref(self, ref):
+		return ProcGit(
+			command='symbolic-ref',
+			args=('-q', ref),
+			git_dir=self.path
+		).ok_line()
 
 	def add_remote(self, name, url):
 		return ProcGit(

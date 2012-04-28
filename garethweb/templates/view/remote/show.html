@@ -49,7 +49,7 @@
 	{% set row.value %}
 		<ul>
 		{% for branch in remote.branches %}
-			<li>{{ branch }}</li>
+			<li>{{ branch.name }} ({{ branch.sha1 }})</li>
 		{% endfor %}
 		</ul>
 	{% endset %}

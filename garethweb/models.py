@@ -173,7 +173,7 @@ class Remote(models.Model):
 
 	@property
 	def branches(self):
-		return self.project.git.remote_branches(self.name)
+		return [self.project.git.ref_obj("refs/remotes/%s/%s" % (self.name, branch), branch) for branch in self.project.git.remote_branches(self.name)]
 
 	def queue_fetch(self):
 		pass
