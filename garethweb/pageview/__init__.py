@@ -4,6 +4,7 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse, reverse_lazy
 from garethweb.pageview.template import get_template
 from garethweb.models import Project, Remote, User
+from garethgit import GarethGitCommit
 import re
 
 # Page breadcrumb handling
@@ -44,6 +45,10 @@ class Breadcrumbs():
 				add(name='users', text='Users', href=reverse('users'))
 			elif isinstance(crumb, User):
 				add(name='user', text=crumb.username, href=('user', {'username': crumb.username}))
+			elif crumb == GarethGitCommit:
+				add(name='commits', text='Commits')
+			elif isinstance(crumb, GarethGitCommit):
+				add(name='commit', text=crumb.sha1)
 			elif type(crumb) == str:
 				add(name=crumb.lower(), text=crumb)
 			else:
@@ -64,6 +69,8 @@ class Breadcrumbs():
 			self.add(crumb.project)
 		elif isinstance(crumb, User):
 			self.add(User)
+		elif isinstance(crumb, GarethGitCommit):
+			self.add(GarethGitCommit)
 		if crumb not in self._crumbs:
 			self._crumbs.append(crumb)
 
@@ -94,8 +101,8 @@ class GarethView():
 		self._breadcrumbs = Breadcrumbs()
 		self.buttons = []
 		self.theme = 'bootstrap'
-		self.activenav = None
-		self.activetab = None
+		self.activenav = ()
+		self.activetab = ()
 
 	def set(self, *args, **kwargs):
 		for k in kwargs:

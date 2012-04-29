@@ -9,6 +9,11 @@ def collect_chunks(buffer):
 	return handler
 
 def collect_list(list):
+	def handle_line(line, EOL):
+		list.append(line)
+	return callback_lines(handle_line)
+
+def callback_lines(callback):
 	buffer = bytearray('')
 	def handler(chunk):
 		buffer.extend(chunk)
@@ -16,7 +21,7 @@ def collect_list(list):
 			m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", buffer)
 			if not m:
 				break
-			list.append(str(m.group(1)))
+			callback(str(m.group(1)), str(m.group(2)))
 			buffer[:len(m.group(0))] = ''
 	return handler
 

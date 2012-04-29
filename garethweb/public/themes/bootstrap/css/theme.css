@@ -1,0 +1,36 @@
+
+#content {
+	margin-bottom: 2em;
+}
+
+.commit-table .alert {
+	margin: 0;
+}
+
+.commit .commit-title,
+.commit .commit-authored {
+	margin: 0;
+}
+.commit .commit-title {
+	font-weight: bold;
+}
+.commit .commit-authored {
+	color: #777;
+}
+.commit .commit-user {
+	color: #333;
+}
+
+.avatar {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+.commit .avatar {
+	float: left;
+	margin-right: 1em;
+}
+
+.hash {
+	font-family: monospace;
+}

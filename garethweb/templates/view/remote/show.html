@@ -1,5 +1,4 @@
 {% extends 'chunk:layout' %}
-{% load url from future %}
 {% load contextmutate %}
 {% block page %}
 
@@ -48,20 +47,9 @@
 {% endwithtable %}
 
 {% for branch in remote.branches %}
-	<h3>{{ branch.name }} ({{ branch.sha1 }})</h3>
-	{% with unreviewed=branch.unreviewed %}
-		{% if unreviewed %}
-		<ul>
-			{% for commit in unreviewed %}
-			<li>{{ commit.sha1 }}</li>
-			{% endfor %}
-		</ul>
-		{% else %}
-			<p>There are no new commits in this branch to be reviewed.</p>
-		{% endif %}
-	{% endwith %}
+	{% include 'chunk:commit:remotebranch' with project=project branch=branch %}
 {% empty %}
-	<p>This remote has no fetched branches.</p>
+	<div class="alert"><p>This remote has no fetched branches.</p></div>
 {% endfor %}
 
 {% endblock %}

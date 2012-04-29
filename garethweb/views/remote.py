@@ -37,7 +37,7 @@ def create(request, project):
 	view = ProjectView(request, project, ('remote', 'create'))
 	view.title = ("Add remote to", ('project', project.name))
 	view.activetab = 'addremote'
-	view.set(project=project, add_form=form)
+	view.set(add_form=form)
 	view.crumb(Remote(project=project), 'Create')
 	return view()
 
@@ -73,7 +73,7 @@ def delete(request, remote):
 	view = ProjectView(request, remote.project, ('remote', 'delete'))
 	view.title = ("Delete remote", ('remote', remote.name))
 	view.activetab = 'remotes'
-	view.set(project=remote.project, remote=remote, form=form)
+	view.set(remote=remote, form=form)
 	view.crumb(remote)
 	view.crumb('Delete')
 	return view()
@@ -95,6 +95,6 @@ def project(request, project):
 	view = ProjectView(request, project, ('remote', 'project'))
 	view.title = (('project', "%s's" % project.name), "remotes")
 	view.activetab = 'remotes'
-	view.set(project=project, remotes=remotes)
+	view.set(remotes=remotes)
 	view.crumb(Remote(project=project))
 	return view()

@@ -1,0 +1,11 @@
+{% load url from future %}
+<table>
+	<tbody>
+	{% for commit in commits %}
+		<tr>
+			<td><a href="{% url 'commit' project=project.name SHA1=commit.sha1 %}">{{ commit.sha1 }}</a></td>
+			<td>{{ commit.title }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>

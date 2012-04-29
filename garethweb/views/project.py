@@ -48,7 +48,7 @@ class ProjectView(GarethView):
 	def tabs(self):
 		return (
 			{ 'name': 'project', 'href': reverse('project', kwargs={ 'name': self.project.name }), 'text': 'Project' },
-			{ 'name': 'remotes', 'href': reverse('project_remotes', kwargs={ 'project': self.project.name }), 'text': 'Remotes' },
+			{ 'name': 'remotes', 'href': reverse('project_remotes', kwargs={ 'project': self.project.name }), 'text': 'Remotes', 'badge': self.project.remote_set.count() },
 			{ 'name': 'addremote', 'href': reverse('remote_create', kwargs={ 'project': self.project.name }), 'text': 'Add remote' },
 		)
 

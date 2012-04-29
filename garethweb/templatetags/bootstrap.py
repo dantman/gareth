@@ -50,7 +50,6 @@ def btnclass(name):
 		return 'btn btn-danger'
 	return 'btn'
 
-
 @register.filter
 @stringfilter
 def maptoicon(name, arg=None):
@@ -60,7 +59,7 @@ def maptoicon(name, arg=None):
 		crumbs = False
 	else:
 		raise TemplateSyntaxError("Unknown argument '%s' to maptoicon" % arg)
-	if crumbs and name in ('projects', 'remotes', 'users'):
+	if crumbs and name in ('projects', 'remotes', 'commits', 'users'):
 		return 'list'
 	if name == 'delete':
 		return 'trash'
@@ -74,6 +73,8 @@ def maptoicon(name, arg=None):
 		return 'leaf'
 	if name in ('remotes', 'remote'):
 		return 'download-alt'
+	if name in ('commits', 'commit'):
+		return 'barcode'
 	if name in ('users', 'user', 'profile', 'login'):
 		return 'user'
 	if name == 'logout':

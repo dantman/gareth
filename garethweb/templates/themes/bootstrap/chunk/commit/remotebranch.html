@@ -1,0 +1,20 @@
+<table class="table table-striped table-bordered commit-table">
+	<tr>
+		<td>
+			<h3>{{ branch.name }} <span class="label label-info">{{ branch.sha1 }}</span></h3>
+		</td>
+	</tr>
+{% with unreviewed=branch.unreviewed %}
+	{% if unreviewed %}
+		{% include 'chunk:commit:list' with project=remote.project commits=unreviewed %}
+	{% else %}
+	<tbody>
+		<tr>
+			<td>
+				<div class="alert alert-info">There are no new commits in this branch to be reviewed.</div>
+			</td>
+		</tr>
+	</tbody>
+	{% endif %}
+{% endwith %}
+</table>

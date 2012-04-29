@@ -1,9 +1,27 @@
-from garethgit.procgit import ProcGit
+from garethgit.procgit import ProcGit, callback_lines
+from hashlib import md5
+from urllib import urlencode
+from datetime import datetime
+import pytz
 import os.path
 import re
 
 class State():
 	pass
+
+class GarethGitUser():
+	def __init__(self, name, email):
+		self.name = name
+		self.email = email
+
+	@property
+	def avatar(self):
+		return "http://www.gravatar.com/avatar/%s?%s" % (md5(self.email.lower()).hexdigest(), urlencode({'s': 40}))
+
+	def __str__(self):
+		return self.__unicode__()
+	def __unicode__(self):
+		return "%s <%s>" % (self.name, self.email)
 
 class GarethGitRef():
 	def __init__(self, git, ref, name=None):
@@ -13,6 +31,8 @@ class GarethGitRef():
 			name = ref
 		self.name = name
 
+	def __str__(self):
+		return self.__unicode__()
 	def __unicode__(self):
 		return self.name
 
@@ -50,6 +70,40 @@ class GarethGitCommit():
 	def __init__(self, git, sha1):
 		self.git = git
 		self.sha1 = sha1
+		self._c = None
+
+	def cat_data(self, name):
+		if not self._c:
+			self._c = self.git.cat_commit(self.sha1)
+		return self._c[name]
+
+	@property
+	def abbrhash(self):
+		return self.sha1[0:8]
+
+	@property
+	def author(self):
+		return self.cat_data('author')
+
+	@property
+	def committer(self):
+		return self.cat_data('committer')
+
+	@property
+	def authored_at(self):
+		return self.cat_data('authored_at')
+
+	@property
+	def committed_at(self):
+		return self.cat_data('committed_at')
+
+	@property
+	def message(self):
+		return self.cat_data('message')
+
+	@property
+	def title(self):
+		return self.message.split("\n")[0]
 
 	def __unicode__(self):
 		return self.sha1
@@ -83,6 +137,68 @@ class GarethGit():
 			args=('-q', ref),
 			git_dir=self.path
 		).ok_line()
+
+	def cat_commit(self, sha1):
+		st = State()
+		st.inmessage = False
+		st.message = bytearray('')
+		def stdoutline(line, EOL):
+			if st.inmessage:
+				st.message.extend("%s\n" % line)
+			elif len(line) == 0:
+				# Blank line indicates a switch to commit message
+				st.inmessage = True
+			else:
+				m = re.match('^(tree|parent)\s+([0-9a-fA-F]{40})$', line)
+				if m:
+					if m.group(1) == 'tree':
+						st.tree = m.group(2)
+					elif m.group(1) == 'parent':
+						st.parent = m.group(2)
+					else:
+						raise Exception("%s is not valid" % m.group(1))
+					return
+				m = re.match('^(author|committer)\s+(.+)\s+<(.+?)>\s+(\d+)\s+([-+]?\d+)$', line)
+				if m:
+					user = GarethGitUser(name=m.group(2), email=m.group(3))
+					time = datetime.fromtimestamp(int(m.group(4)))
+					if m.group(1) == 'author':
+						st.author = user
+						st.authored_at = time
+					elif m.group(1) == 'committer':
+						st.committer = user
+						st.committed_at = time
+					else:
+						raise Exception("Unknown user type '%s'" % m.group(1))
+					return
+				raise Exception("Unknown line '%s' in git commit." % line)
+
+		ret = ProcGit(
+			command='cat-file',
+			args=('commit', sha1),
+			stdout=callback_lines(stdoutline),
+			git_dir=self.path
+		).exit_ok()
+
+		if not ret:
+			return None
+
+		commit = {}
+		commit['message'] = str(st.message)
+		if st.tree:
+			commit['tree'] = st.tree
+		if st.parent:
+			commit['parent'] = st.parent
+		if st.author:
+			commit['author'] = st.author
+		if st.authored_at:
+			commit['authored_at'] = st.authored_at
+		if st.committer:
+			commit['committer'] = st.committer
+		if st.committed_at:
+			commit['committed_at'] = st.committed_at
+
+		return commit
 
 	def add_remote(self, name, url):
 		return ProcGit(

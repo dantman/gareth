@@ -1,7 +1,7 @@
 {% block tabs %}
 <ul class="nav nav-tabs">
 {% for item in tabs %}
-	<li id="tab-{{ item.name }}"{% if item.active %} class="active"{% endif %}><a href="{{ item.href }}">{{ item.text }}</a></li>
+	<li id="tab-{{ item.name }}"{% if item.active %} class="active"{% endif %}><a href="{{ item.href }}">{{ item.text }}{% if item.badge %} <span class="badge">{{ item.badge }}</span>{% endif %}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

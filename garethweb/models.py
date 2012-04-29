@@ -21,6 +21,11 @@ class Project(models.Model):
 	def git(self):
 		return GarethGit(self.git_path)
 
+	def get_commit(self, SHA1):
+		commit = self.git.commit_obj(SHA1)
+		commit.project = self
+		return commit
+
 	def __unicode__(self):
 		return self.name
 

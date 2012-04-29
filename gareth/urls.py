@@ -4,6 +4,9 @@ urlpatterns = patterns('garethweb.views',
 	# Home
     url(r'^$', 'home', name='home'),
 
+    # Commits
+    url(r'^p/(?P<project>.+).git/commit/(?P<SHA1>[0-9a-fA-F]{40})$', 'commit.show', name='commit'),
+
     # Remotes
     url(r'^p/(?P<project>.+).git/remotes/create$', 'remote.create', name='remote_create'),
     url(r'^p/(?P<project>.+).git/remotes/(?P<ID>[0-9a-fA-F]{40})/fetch$', 'remote.fetch', name='remote_fetch'),
