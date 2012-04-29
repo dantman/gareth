@@ -1,6 +1,20 @@
 {% extends 'chunk:layout' %}
+{% load git %}
 {% block page %}
 
+<div class="well commit">
+	<h4>{{ commit.title }}</h4>
+	{{ commit.messagecont|commitmessage }}
+	<div class="hangover aviline">
+		<div class="pull-right">
+
+		</div>
+		<div class="commit-authored clearfix">
+			<img class="miniavatar" src="{{ commit.author.miniavatar }}">
+			Authored by <span class="commit-user">{{ commit.author.name }}</span>, <time datetime="{{ commit.committed_at.isoformat }}Z">{{ commit.committed_at|timesince }} ago</time>
+		</div>
+	</div>
+</div>
 
 
 {% endblock %}

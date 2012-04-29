@@ -18,6 +18,10 @@ class GarethGitUser():
 	def avatar(self):
 		return "http://www.gravatar.com/avatar/%s?%s" % (md5(self.email.lower()).hexdigest(), urlencode({'s': 40}))
 
+	@property
+	def miniavatar(self):
+		return "http://www.gravatar.com/avatar/%s?%s" % (md5(self.email.lower()).hexdigest(), urlencode({'s': 24}))
+
 	def __str__(self):
 		return self.__unicode__()
 	def __unicode__(self):
@@ -104,6 +108,10 @@ class GarethGitCommit():
 	@property
 	def title(self):
 		return self.message.split("\n")[0]
+
+	@property
+	def messagecont(self):
+		return "\n".join(self.message.split("\n")[1:]).lstrip("\n")
 
 	def __unicode__(self):
 		return self.sha1

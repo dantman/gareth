@@ -21,6 +21,7 @@
 	color: #333;
 }
 
+.miniavatar,
 .avatar {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -30,7 +31,27 @@
 	float: left;
 	margin-right: 1em;
 }
+.commit .miniavatar {
+	float: left;
+	margin-right: 0.5em;
+}
 
 .hash {
 	font-family: monospace;
+}
+
+.well .hangover {
+	background: #fff;
+	border-top: 1px solid #eee;
+	margin: 1em -19px -19px;
+	padding: .35em;
+	-moz-border-radius-bottomleft: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+.well .aviline {
+	line-height: 24px;
 }
