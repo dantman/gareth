@@ -6,10 +6,18 @@ import pytz
 import os.path
 import re
 
-class State():
+class State(object):
 	pass
 
-class GarethGitUser():
+class GarethGitHash(object):
+	def __init__(self, sha1):
+		self.sha1 = sha1
+
+	@property
+	def abbrhash(self):
+		return self.sha1[0:8]
+
+class GarethGitUser(object):
 	def __init__(self, name, email):
 		self.name = name
 		self.email = email
@@ -27,7 +35,7 @@ class GarethGitUser():
 	def __unicode__(self):
 		return "%s <%s>" % (self.name, self.email)
 
-class GarethGitRef():
+class GarethGitRef(object):
 	def __init__(self, git, ref, name=None):
 		self.git = git
 		self.ref = ref
@@ -70,7 +78,7 @@ class GarethGitRemoteBranch(GarethGitRef):
 	def unreviewed(self):
 		return self.git.unmerged_commits(self.ref)
 
-class GarethGitCommit():
+class GarethGitCommit(GarethGitHash):
 	def __init__(self, git, sha1):
 		self.git = git
 		self.sha1 = sha1
@@ -80,10 +88,6 @@ class GarethGitCommit():
 		if not self._c:
 			self._c = self.git.cat_commit(self.sha1)
 		return self._c[name]
-
-	@property
-	def abbrhash(self):
-		return self.sha1[0:8]
 
 	@property
 	def author(self):
@@ -106,6 +110,14 @@ class GarethGitCommit():
 		return self.cat_data('message')
 
 	@property
+	def parents(self):
+		return map(lambda sha1: GarethGitHash(sha1), self.cat_data('parents'))
+
+	@property
+	def parent(self):
+		return self.parents[0]
+
+	@property
 	def title(self):
 		return self.message.split("\n")[0]
 
@@ -116,7 +128,7 @@ class GarethGitCommit():
 	def __unicode__(self):
 		return self.sha1
 
-class GarethGit():
+class GarethGit(object):
 	path = None
 	def __init__(self, path):
 		self.path = path
@@ -150,6 +162,7 @@ class GarethGit():
 		st = State()
 		st.inmessage = False
 		st.message = bytearray('')
+		st.parents = []
 		def stdoutline(line, EOL):
 			if st.inmessage:
 				st.message.extend("%s\n" % line)
@@ -162,7 +175,7 @@ class GarethGit():
 					if m.group(1) == 'tree':
 						st.tree = m.group(2)
 					elif m.group(1) == 'parent':
-						st.parent = m.group(2)
+						st.parents.append(m.group(2))
 					else:
 						raise Exception("%s is not valid" % m.group(1))
 					return
@@ -195,8 +208,8 @@ class GarethGit():
 		commit['message'] = str(st.message)
 		if st.tree:
 			commit['tree'] = st.tree
-		if st.parent:
-			commit['parent'] = st.parent
+		if st.parents:
+			commit['parents'] = st.parents
 		if st.author:
 			commit['author'] = st.author
 		if st.authored_at:

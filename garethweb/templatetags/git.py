@@ -1,4 +1,4 @@
-from django.template.base import TemplateSyntaxError, Library, Node, token_kwargs
+from django.template.base import TemplateSyntaxError, Library
 from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe

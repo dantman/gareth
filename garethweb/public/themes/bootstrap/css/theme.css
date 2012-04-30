@@ -14,11 +14,16 @@
 .commit .commit-title {
 	font-weight: bold;
 }
+.commit .hangover,
 .commit .commit-authored {
 	color: #777;
 }
-.commit .commit-user {
+.commit .commit-user,
+.commit .hangover .hash {
 	color: #333;
+}
+.commit .commit-objhash {
+	margin-left: 1em;
 }
 
 .miniavatar,
@@ -36,8 +41,11 @@
 	margin-right: 0.5em;
 }
 
-.hash {
+.btn.hash {
 	font-family: monospace;
+}
+a.hash {
+	border-bottom: 1px dotted #ccc;
 }
 
 .well .hangover {

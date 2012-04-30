@@ -1,4 +1,6 @@
 {% extends 'chunk:layout' %}
+{% load url from future %}
+{% load utils %}
 {% load git %}
 {% block page %}
 
@@ -7,7 +9,14 @@
 	{{ commit.messagecont|commitmessage }}
 	<div class="hangover aviline">
 		<div class="pull-right">
-
+			<span class="commit-objhash">
+				{% if commit.parents %}
+				{{ commit.parents|length }} {{ commit.parents|length|pluralize:"parent,parents" }} {% join commit.parents as parent by ", " %}<a href="{% url 'commit' project=project.name SHA1=parent.sha1 %}" class="hash">{{ parent.abbrhash }}</a>{% endjoin %}
+				{% else %}
+				<span class="hash">no parents</span>
+				{% endif %}
+			</span>
+			<span class="commit-objhash">commit <span class="hash">{{ commit.sha1 }}</span></span>
 		</div>
 		<div class="commit-authored clearfix">
 			<img class="miniavatar" src="{{ commit.author.miniavatar }}">
