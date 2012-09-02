@@ -23,6 +23,8 @@ MIDDLEWARE_CLASSES = (
 	'garethweb.pageview.middleware.ThemeMiddleware',
 )
 
+SESSION_COOKIE_HTTPONLY = True
+
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 TEMPLATE_DIRS = (

@@ -18,3 +18,6 @@ DATABASES = {
 SECRET_KEY = [...]
 
 REPO_PATH = [...]
+
+# Use secure cookies (only do this if using https://)
+SESSION_COOKIE_SECURE = True
