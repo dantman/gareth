@@ -1,0 +1,7 @@
+- .guess_lexer_for_filename on both blobs to get two lexers
+- lexer.get_tokens on both blobs to get the token streams
+- Pass token stream into a generator that turns the single level token stream into a multi-level stream where the first level is lines and the next is a stream of tokens within that line.
+- Pass both blobs into Google's diff_match_patch:diff_main to get a diff stream
+- Pass the diff stream into a generator that converts the char diff stream into a line based diff stream with char based streams for each line.
+- Give the token streams and the diff stream to a special handler. This handler should format a table (either in unified or side-by-side diff mode based on an option given to the handler) that contains a syntax highlighted diff of both sides of the diff.
+-- Using the line based diff stream the handler should know when it should pull from the old, new, or both of the syntax highlighting streams. Using both the token stream and the char diff stream it should be possible to create html output that contains both syntax highlighting spans and diff del/ins tags.

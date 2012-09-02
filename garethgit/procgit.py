@@ -18,7 +18,7 @@ def callback_lines(callback):
 	def handler(chunk):
 		buffer.extend(chunk)
 		while True:
-			m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", buffer)
+			m = re.match("^([^\r\n]*?)(\r\n|\r|\n)", buffer, re.DOTALL)
 			if not m:
 				break
 			callback(str(m.group(1)), str(m.group(2)))
@@ -45,6 +45,7 @@ class ProcGit():
 		env = {}
 		if self.git_dir:
 			env['GIT_DIR'] = self.git_dir
+		print "Running %s" % args
 		p = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.git_dir, env=env)
 		rlist = [p.stderr, p.stdout]
 		wlist = []
@@ -85,12 +86,18 @@ class ProcGit():
 	def exit_ok(self):
 		return self.exit_code() == 0
 
-	def ok_line(self):
+	def ok_string(self):
 		output = bytearray('')
 		self.stdout = collect_chunks(output)
 		if self.exit_ok():
-			return str(output).rstrip()
+			return str(output)
 		return None
+
+	def ok_line(self):
+		ret = self.ok_string()
+		if ret:
+			ret = ret.rstrip()
+		return ret
 
 	def return_list(self):
 		output = []

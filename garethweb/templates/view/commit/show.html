@@ -1,5 +1,6 @@
 {% extends 'chunk:layout' %}
 {% load url from future %}
+{% load bootstrap %}
 {% load utils %}
 {% load git %}
 {% block page %}
@@ -25,5 +26,23 @@
 	</div>
 </div>
 
+<table class="commit-changes">
+{% for change in commit.diff.changes %}
+	<tr class="change-{{ change.type }}">
+		<td class="type"><span class="iconwrap">{% icon change.type|diffchangetypemaptoicon %}</span></td>
+		<td class="path"><a href="#">{{ change.path }}</a></td>
+		<td class="stat">
+			{{ change.total_lines }}
+			<span class="diffstat">{{ change.diffstat|diffstatcontent }}</span>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+
+<div class="commit-diffs">
+{% for change in commit.diff.changes %}
+{{ change.htmldiff|safe }}
+{% endfor %}
+</div>
 
 {% endblock %}

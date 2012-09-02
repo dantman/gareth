@@ -38,6 +38,8 @@ def do_join_tag(parser, token):
 		if len(bits) < 1:
 			raise TemplateSyntaxError("'%s's arg '%s' requires one argument value." %  (arg, tags))
 		value = bits.pop(0)
+		if arg == 'by':
+			value = parser.compile_filter(value)
 		options[arg] = value
 
 	if 'as' in options:
@@ -66,4 +68,4 @@ class JoinNode(Node):
 				context.pop()
 		else:
 			raise NotImplemented()
-		return self.options['by'].join(output)
+		return self.options['by'].resolve(context).join(output)

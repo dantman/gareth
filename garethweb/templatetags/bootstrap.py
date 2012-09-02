@@ -1,6 +1,7 @@
 from django.template.base import TemplateSyntaxError, Library, Node, token_kwargs
 from django.template.defaultfilters import stringfilter
-from django.utils.html import escape
+from django.utils.html import escape, conditional_escape
+from django.utils.safestring import mark_safe
 
 register = Library()
 
@@ -86,3 +87,28 @@ def maptoicon(name, arg=None):
 	if name == 'settings':
 		return 'cog'
 	return ''
+
+@register.filter
+@stringfilter
+def diffchangetypemaptoicon(t):
+	if t == 'A':
+		return 'file'
+	if t == 'D':
+		return 'trash'
+	if t == 'M':
+		return 'edit'
+	if t == 'R':
+		return 'arrow-right'
+	return 'question-sign'
+
+@register.filter
+def diffstatcontent(diffstat):
+	out = bytearray('')
+	for stat in diffstat:
+		if stat == "+":
+			out.extend('<span class="add">+</span>')
+		elif stat == "-":
+			out.extend('<span class="del">-</span>')
+		else:
+			out.extend('<span class="nil">&nbsp;</span>')
+	return mark_safe(str(out))

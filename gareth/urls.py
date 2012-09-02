@@ -30,4 +30,7 @@ urlpatterns = patterns('garethweb.views',
 	url(r'^settings$', 'settings.profile', name='settings'),
 	url(r'^settings/identities$', 'settings.identities', name='identities'),
 	url(r'^settings/remotes$', 'settings.remotes', name='my_remotes'),
+
+    # Resources
+    url(r'^resources/pygments.css$', 'resources.pygments'),
 )

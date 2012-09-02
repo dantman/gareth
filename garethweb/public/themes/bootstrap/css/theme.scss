@@ -1,0 +1,126 @@
+
+@import "../../../css/utils";
+
+#content {
+	margin-bottom: 2em;
+}
+
+/** Commit List & Commit Page **/
+.commit-table .alert {
+	margin: 0;
+}
+
+.commit .commit-title,
+.commit .commit-authored {
+	margin: 0;
+}
+.commit .commit-title {
+	font-weight: bold;
+}
+.commit .hangover,
+.commit .commit-authored {
+	color: #777;
+}
+.commit .commit-user,
+.commit .hangover .hash {
+	color: #333;
+}
+.commit .commit-objhash {
+	margin-left: 1em;
+}
+
+.miniavatar,
+.avatar {
+	@include rounded(5px);
+}
+.commit .avatar {
+	float: left;
+	margin-right: 1em;
+}
+.commit .miniavatar {
+	float: left;
+	margin-right: 0.5em;
+}
+
+.btn.hash {
+	font-family: monospace;
+}
+a.hash {
+	border-bottom: 1px dotted #ccc;
+}
+
+.well .hangover {
+	background: #fff;
+	border-top: 1px solid #eee;
+	margin: 1em -19px -19px;
+	padding: .35em;
+	-moz-border-radius-bottomleft: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+.well .aviline {
+	line-height: 24px;
+}
+
+.commit-changes {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0.5em;
+	margin-bottom: 1.5em;
+}
+.commit-changes .type {
+	width: 14px;
+}
+.commit-changes .iconwrap {
+	display: inline-block;
+	padding: 1px 3px;
+	background-color: #e6e6e6;
+	@include background-gradient(#fff, #e6e6e6);
+	@include rounded(3px);
+}
+.commit-changes .change-A .iconwrap {
+	background-color: #b2e692;
+	@include background-gradient(#c9edb4, #95dd6a);
+}
+.commit-changes .change-D .iconwrap {
+	background-color: #f73a3a;
+	@include background-gradient(#fc3f3f, #c00303);
+}
+.commit-changes .change-R .iconwrap {
+	background-color: #e1e68b;
+	@include background-gradient(#f6fca0, #bcc167);
+}
+.commit-changes .stat {
+	text-align: right;
+	font-weight: bold;
+	font-size: 0.9em;
+	color: #555;
+	vertical-align: middle;
+}
+
+.diffstat {
+	vertical-align: middle;
+	font-size: 0;
+}
+span.diffstat {
+	display: inline-block;
+}
+.diffstat span {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	vertical-align: middle;
+	color: transparent;
+	background-color: #bbb;
+	margin-left: 1px;
+	@include rounded(1.5px)
+}
+.diffstat span.add {
+	background-color: #61c423;
+}
+.diffstat span.del {
+	background-color: #c52323;
+}

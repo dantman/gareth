@@ -1,4 +1,5 @@
 from garethgit.procgit import ProcGit, callback_lines
+from garethgit import syntaxdiff as diff
 from hashlib import md5
 from urllib import urlencode
 from datetime import datetime
@@ -9,7 +10,7 @@ import re
 class State(object):
 	pass
 
-class GarethGitHash(object):
+class GitHash(object):
 	def __init__(self, sha1):
 		self.sha1 = sha1
 
@@ -35,7 +36,7 @@ class GarethGitUser(object):
 	def __unicode__(self):
 		return "%s <%s>" % (self.name, self.email)
 
-class GarethGitRef(object):
+class GitRef(object):
 	def __init__(self, git, ref, name=None):
 		self.git = git
 		self.ref = ref
@@ -68,26 +69,128 @@ class GarethGitRef(object):
 			ref = ref.symbolic
 		return ref.content
 
-class GarethGitRemoteBranch(GarethGitRef):
+class GarethGitRemoteBranch(GitRef):
 	def __init__(self, git, remote, branch, name=None):
 		if not name:
 			name = branch
-		GarethGitRef.__init__(self, git, "refs/remotes/%s/%s" % (remote, branch), name)
+		GitRef.__init__(self, git, "refs/remotes/%s/%s" % (remote, branch), name)
 
 	@property
 	def unreviewed(self):
 		return self.git.unmerged_commits(self.ref)
 
-class GarethGitCommit(GarethGitHash):
+class GarethGitDiffChange(object):
+	# types = {
+	# 	'A': 'add',
+	# 	'C': 'copy',
+	# 	'D': 'delete',
+	# 	'M': 'modify',
+	# 	'R': 'rename',
+	# 	'T': 'type',
+	# }
+	def __init__(self, diff, change):
+		self.diff = diff
+		self._change = change
+
+	@property
+	def type(self):
+		return self._change['change_type']
+		# if self.change_type in self.types:
+		# 	return self.types[self.change_type]
+		# return self.change_type
+
+	# @property
+	# def change_type(self):
+	# 	return self._change['change_type']
+
+	@property
+	def total_lines(self):
+		return int(self._change['add_lines']) + int(self._change['del_lines'])
+
+	@property
+	def diffstat(self, statlength=5):
+		total = float(self.diff.max_total_lines)
+		if total:
+			added = round((float(self._change['add_lines']) / total) * statlength)
+			deleted = round((float(self._change['del_lines']) / total) * statlength)
+		else:
+			added = 0
+			deleted = 0
+		leftover = statlength - added - deleted
+		return tuple(('+' * int(added)) + ('-' * int(deleted)) + (' ' * int(leftover)))
+
+	@property
+	def old_path(self):
+		return self._change['old_path']
+
+	@property
+	def new_path(self):
+		return self._change['new_path']
+
+	@property
+	def old_hash(self):
+		return GitHash(self._change['old_hash'])
+
+	@property
+	def new_hash(self):
+		return GitHash(self._change['new_hash'])
+
+	@property
+	def htmldiff(self):
+		try:
+			old = self.diff.git.cat_blob(self.old_hash.sha1)
+			new = self.diff.git.cat_blob(self.new_hash.sha1)
+			return diff.render(
+				old_path=self.old_path,
+				old_blob=old,
+				new_path=self.new_path,
+				new_blob=new
+			)
+		except Exception, e:
+			import traceback
+			traceback.print_exc()
+			raise
+
+	@property
+	def path(self):
+		return self._change['path']
+
+class GarethGitDiff(object):
+	def __init__(self, git, changes):
+		self.git = git
+		self._changes = changes
+
+	@property
+	def max_total_lines(self):
+		return max((change.total_lines for change in self.changes))
+
+	@property
+	def changes(self):
+		return (GarethGitDiffChange(self, v) for v in self._changes.itervalues())
+
+class GitMode(object):
+	def __init__(self, mode):
+		if isinstance(mode, str):
+			mode = int(mode, 8)
+		self.mode = mode
+
+	def __str__(self):
+		return self.__unicode__()
+	def __unicode__(self):
+		return "%o" % self.mode
+
+class GitCommit(GitHash):
 	def __init__(self, git, sha1):
 		self.git = git
 		self.sha1 = sha1
 		self._c = None
 
-	def cat_data(self, name):
+	def cat_data(self, name, default=None):
 		if not self._c:
 			self._c = self.git.cat_commit(self.sha1)
-		return self._c[name]
+		if name in self._c:
+			return self._c[name]
+		return default
 
 	@property
 	def author(self):
@@ -111,7 +214,7 @@ class GarethGitCommit(GarethGitHash):
 
 	@property
 	def parents(self):
-		return map(lambda sha1: GarethGitHash(sha1), self.cat_data('parents'))
+		return map(lambda sha1: GitHash(sha1), self.cat_data('parents', []))
 
 	@property
 	def parent(self):
@@ -124,6 +227,10 @@ class GarethGitCommit(GarethGitHash):
 	@property
 	def messagecont(self):
 		return "\n".join(self.message.split("\n")[1:]).lstrip("\n")
+
+	@property
+	def diff(self):
+		return self.git.complete_diff(self.sha1)
 
 	def __unicode__(self):
 		return self.sha1
@@ -143,10 +250,10 @@ class GarethGit(object):
 		return os.path.join(self.path, name)
 
 	def ref_obj(self, ref, name=None):
-		return GarethGitRef(self, ref, name)
+		return GitRef(self, ref, name)
 
 	def commit_obj(self, sha1):
-		return GarethGitCommit(self, sha1)
+		return GitCommit(self, sha1)
 
 	def remotebranch_obj(self, remote, branch, name=None):
 		return GarethGitRemoteBranch(self, remote, branch, name)
@@ -157,6 +264,13 @@ class GarethGit(object):
 			args=('-q', ref),
 			git_dir=self.path
 		).ok_line()
+
+	def cat_blob(self, sha1):
+		return ProcGit(
+			command='cat-file',
+			args=('blob', sha1),
+			git_dir=self.path
+		).ok_string()
 
 	def cat_commit(self, sha1):
 		st = State()
@@ -200,7 +314,6 @@ class GarethGit(object):
 			stdout=callback_lines(stdoutline),
 			git_dir=self.path
 		).exit_ok()
-
 		if not ret:
 			return None
 
@@ -319,3 +432,201 @@ class GarethGit(object):
 			git_dir=self.path
 		).return_list()
 		return [self.commit_obj(rev) for rev in revs]
+
+	def complete_diff(self, commit):
+		st = State()
+		st.first = True
+		st.diffbody = False
+		st.change = {}
+		st.diff = {}
+
+		output = bytearray('')
+		def stdout(chunk):
+			output.extend(chunk)
+			while True:
+				if not st.diffbody:
+					# Header; Raw (changed list) + Stat (lines changed)
+
+					if st.first:
+						m = re.match('^[0-9a-z]{40}\0', output)
+						if m:
+							output[:len(m.group(0))] = ''
+							st.first = False
+							continue
+
+					# Handle copy and rename changes
+					m = re.match('^:(\d+) (\d+) ([0-9a-z]+(?:\.{3})?) ([0-9a-z]+(?:\.{3})?) ([CR])(\d+)\0(.*?)\0(.*?)\0', output, re.DOTALL)
+					if m:
+						output[:len(m.group(0))] = ''
+						raise NotImplementedError("Copy/Rename handling not implemented.")
+						st.first = False
+						continue
+
+					# Handle changes
+					m = re.match('^:(\d+) (\d+) ([0-9a-z]+(?:\.{3})?) ([0-9a-z]+(?:\.{3})?) ([A-Z])\0(.*?)\0', output, re.DOTALL)
+					if m:
+						if str(m.group(5)) not in "ADMTUX":
+							raise Exception("Invalid change type %s" % m.group(5))
+						path = str(m.group(6))
+						st.change[path] = {
+							'old_mode': GitMode(str(m.group(1))),
+							'new_mode': GitMode(str(m.group(2))),
+							'old_hash': str(m.group(3)),
+							'new_hash': str(m.group(4)),
+							'add_lines': 0,
+							'del_lines': 0,
+							'change_type': str(m.group(5)),
+							'old_path': path,
+							'new_path': path,
+							'path': path,
+						}
+						output[:len(m.group(0))] = ''
+						st.first = False
+						continue
+
+					# Handle number of lines modified in renames/coppies
+					m = re.match('^(\d+|-)\t(\d+|-)\t\0(.*?)\0(.*?)\0', output, re.DOTALL)
+					if m:
+						output[:len(m.group(0))] = ''
+						raise NotImplementedError("Copy/Rename handling not implemented.")
+						st.first = False
+						continue
+
+					# Handle number of lines modified in changes
+					m = re.match('^(\d+|-)\t(\d+|-)\t(.*?)\0', output, re.DOTALL)
+					if m:
+						path = str(m.group(3))
+						if m.group(1) != '-':
+							st.change[path]['add_lines'] = int(m.group(1))
+						if m.group(2) != '-':
+							st.change[path]['del_lines'] = int(m.group(2))
+						output[:len(m.group(0))] = ''
+						st.first = False
+						continue
+
+					# A finial NUL indicates the end of the header
+					m = re.match('^\0', output)
+					if m:
+						st.diffbody = True
+						output[:len(m.group(0))] = ''
+						st.first = False
+						continue
+
+					if re.match('\n', output):
+						raise Exception("Unknown diff output found: '%s'." % output[:64])
+
+					# We may not have enough data, wait for the next chunk
+					break
+				else:
+					# Body of the diff
+
+					m = re.match('^-{3} (.*?)\n\+{3} (.*?)\n', output)
+					if m:
+						old_path = str(m.group(1))
+						new_path = str(m.group(2))
+
+						# Copy the path if one is /dev/null
+						if old_path == "/dev/null":
+							old_path = new_path
+						elif new_path == "/dev/null":
+							new_path = old_path
+						if old_path == new_path:
+							path = old_path
+							st.cur_diff = {
+								'old_path': old_path,
+								'new_path': new_path,
+								'path': path,
+								'chunks': [],
+							}
+							st.diff[path] = st.cur_diff
+							st.cur_chunk = None
+						else:
+							raise NotImplementedError("Copy/Rename handling not implemented: %s -> %s" % (old_path, new_path))
+						output[:len(m.group(0))] = ''
+						continue
+
+					m = re.match('^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@(?: (.*?))?\n', output)
+					if m:
+						if not st.cur_diff:
+							raise Exception("@@ line found outside of a diff: %s " % m.group(0))
+						st.cur_chunk = {
+							'heading': str(m.group(5)),
+							'lines': [],
+							'cur_old_linenum': int(m.group(1)),
+							'cur_new_linenum': int(m.group(3)),
+						}
+						st.cur_diff['chunks'].append(st.cur_chunk)
+						output[:len(m.group(0))] = ''
+						continue
+
+					m = re.match('^([-+ ])(.*?)\n', output)
+					if m:
+						if not st.cur_chunk:
+							raise Exception("Diff line found outside of a chunk: %s " % m.group(0))
+						t = str(m.group(1))
+						old_line = None
+						new_line = None
+						if t == '-':
+							old_line = st.cur_chunk['cur_old_linenum']
+							st.cur_chunk['cur_old_linenum'] += 1
+						elif t == '+':
+							new_line = st.cur_chunk['cur_new_linenum']
+							st.cur_chunk['cur_new_linenum'] += 1
+						else:
+							old_line = st.cur_chunk['cur_old_linenum']
+							st.cur_chunk['cur_old_linenum'] += 1
+							new_line = st.cur_chunk['cur_new_linenum']
+							st.cur_chunk['cur_new_linenum'] += 1
+						st.cur_chunk['lines'].append({
+							'type': t,
+							'line': str(m.group(2)),
+							'old_num': old_line,
+							'new_num': new_line,
+						})
+						output[:len(m.group(0))] = ''
+						continue
+
+					m = re.match('^.+?\n', output)
+					if m:
+						output[:len(m.group(0))] = ''
+						continue
+
+					break
+
+		ret = ProcGit(
+			command='diff-tree',
+			args=(
+				# For the first commit in a repo pretend an empty commit exists before it so we can get a diff for it
+				'--root',
+				# First output a list of files modified
+				'--raw',
+				# Don't abbreviate blob hashes in raw format
+				'--abbrev=-1',
+				# Output a stat of #-lines changed we can use to display things in the ui
+				'--numstat',
+				# Output a unified diff
+				# Be explicit about the 3 lines context so we can let the user control that later.
+				# '--unified=%d' % 3,
+				# We don't want the default-on one-way text conversion
+				# '--no-textconv',
+				# Strip the a/ b/ out from paths to make things simple
+				# '--no-prefix',
+				# Output full sha1s for diffs instead of abbreviated ones
+				# '--full-index',
+				# Use --no-renames until we implement special handling for copy/rename within diffs
+				'--no-renames',
+				# Use NUL bytes as terminators instead of munging paths
+				'-z',
+				# <sha1> of the commit
+				commit,
+			),
+			stdout=stdout,
+			git_dir=self.path
+		).exit_ok()
+
+		if len(output) > 0:
+			raise Exception("Left over output: %s" % output)
+
+		if not ret:
+			return None
+		return GarethGitDiff(self, st.change)
