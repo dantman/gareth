@@ -26,9 +26,9 @@ DATABASES = {
 	}
 }
 if not os.path.exists(DATABASES['default']['NAME']):
-	os.mkdirs(DATABASES['default']['NAME'])
+	os.makedirs(DATABASES['default']['NAME'])
 
 # Configure the repository path
 REPO_PATH = os.path.join(__root__, 'repos')
 if not os.path.exists(REPO_PATH):
-	os.mkdirs(REPO_PATH)
+	os.makedirs(REPO_PATH)
