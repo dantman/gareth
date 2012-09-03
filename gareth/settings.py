@@ -108,4 +108,13 @@ LOGGING = {
 
 from garethweb.settings import *
 
-from settings_user import *
+try:
+    from settings_user import *
+except ImportError, e:
+    if "settings_user" in e.message:
+        print "Gareth has not been configured (settings_user.py could not be found)"
+        print "Please configure Gareth by creating a gareth/settings_user.py file."
+        print "A sample config can be found at gareth/settings_user-sample.py"
+        exit(1)
+    else:
+        raise e
