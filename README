@@ -5,7 +5,8 @@
 * pytz
 * pygments
 * stomp.py
-[...Incomplete...]
+
+You can use `pip install -r requirements.txt` to install all the necessary modules at the last version we tested them with.
 
 == Setup ==
 # Create a settings file at gareth/settings_user.py; There is a settings_user-sample.py you can use as a base.
@@ -14,3 +15,17 @@
 # Run `./manage.py migrate` to finish database setup
 # You can run `./manage.py createuser -a {username} {password}` to create an admin user to login with
 # For development you can run `./manage.py runserver` to start up a development server on localhost
+
+== Developer quick install ==
+The quickest pattern to try out Gareth or help out with it's development is to do this:
+  # Clone Gareth and cd into the correct directory
+  $ virtualenv .
+  $ source bin/activate
+  $ pip install -r requirements.txt
+  $ ./setupdev.py
+  $ ./manage.py syncdb
+  $ ./manage.py migrate
+  $ ./manage.py createuser -a admin admin
+  $ ./manage.py runserver
+
+This will setup an isolated virtualenv. Install the packages necessary for Gareth. Install Gareth. Create an admin:admin user for you. And then start a webserver on localhost.
