@@ -2,6 +2,7 @@
 /dbs/
 /repos/
 *.pyc
+/.sass-cache/
 # virtualenv
 /.Python
 /lib/

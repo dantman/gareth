@@ -1,65 +1,131 @@
-
 #content {
-	margin-bottom: 2em;
-}
+  margin-bottom: 2em; }
 
+/** Commit List & Commit Page **/
 .commit-table .alert {
-	margin: 0;
-}
+  margin: 0; }
 
 .commit .commit-title,
 .commit .commit-authored {
-	margin: 0;
-}
+  margin: 0; }
 .commit .commit-title {
-	font-weight: bold;
-}
+  font-weight: bold; }
 .commit .hangover,
 .commit .commit-authored {
-	color: #777;
-}
+  color: #777; }
 .commit .commit-user,
 .commit .hangover .hash {
-	color: #333;
-}
+  color: #333; }
 .commit .commit-objhash {
-	margin-left: 1em;
-}
+  margin-left: 1em; }
 
 .miniavatar,
 .avatar {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-}
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px; }
+
 .commit .avatar {
-	float: left;
-	margin-right: 1em;
-}
+  float: left;
+  margin-right: 1em; }
+
 .commit .miniavatar {
-	float: left;
-	margin-right: 0.5em;
-}
+  float: left;
+  margin-right: 0.5em; }
 
 .btn.hash {
-	font-family: monospace;
-}
+  font-family: monospace; }
+
 a.hash {
-	border-bottom: 1px dotted #ccc;
-}
+  border-bottom: 1px dotted #ccc; }
 
 .well .hangover {
-	background: #fff;
-	border-top: 1px solid #eee;
-	margin: 1em -19px -19px;
-	padding: .35em;
-	-moz-border-radius-bottomleft: 3px;
-	-moz-border-radius-bottomright: 3px;
-	-webkit-border-bottom-left-radius: 3px;
-	-webkit-border-bottom-right-radius: 3px;
-	border-bottom-left-radius: 3px;
-	border-bottom-right-radius: 3px;
-}
+  background: #fff;
+  border-top: 1px solid #eee;
+  margin: 1em -19px -19px;
+  padding: .35em;
+  -moz-border-radius-bottomleft: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px; }
+
 .well .aviline {
-	line-height: 24px;
-}
+  line-height: 24px; }
+
+.commit-changes {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0.5em;
+  margin-bottom: 1.5em; }
+  .commit-changes .type {
+    width: 14px; }
+  .commit-changes .iconwrap {
+    display: inline-block;
+    padding: 1px 3px;
+    background-color: #e6e6e6;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, white, #e6e6e6);
+    background-image: -moz-linear-gradient(top, white, #e6e6e6);
+    background-image: -ms-linear-gradient(top, white, #e6e6e6);
+    background-image: -o-linear-gradient(top, white, #e6e6e6);
+    background-image: linear-gradient(to bottom, white, #e6e6e6);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px; }
+  .commit-changes .change-A .iconwrap {
+    background-color: #b2e692;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#c9edb4), to(#95dd6a));
+    background-image: -webkit-linear-gradient(top, #c9edb4, #95dd6a);
+    background-image: -moz-linear-gradient(top, #c9edb4, #95dd6a);
+    background-image: -ms-linear-gradient(top, #c9edb4, #95dd6a);
+    background-image: -o-linear-gradient(top, #c9edb4, #95dd6a);
+    background-image: linear-gradient(to bottom, #c9edb4, #95dd6a); }
+  .commit-changes .change-D .iconwrap {
+    background-color: #f73a3a;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#fc3f3f), to(#c00303));
+    background-image: -webkit-linear-gradient(top, #fc3f3f, #c00303);
+    background-image: -moz-linear-gradient(top, #fc3f3f, #c00303);
+    background-image: -ms-linear-gradient(top, #fc3f3f, #c00303);
+    background-image: -o-linear-gradient(top, #fc3f3f, #c00303);
+    background-image: linear-gradient(to bottom, #fc3f3f, #c00303); }
+  .commit-changes .change-R .iconwrap {
+    background-color: #e1e68b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f6fca0), to(#bcc167));
+    background-image: -webkit-linear-gradient(top, #f6fca0, #bcc167);
+    background-image: -moz-linear-gradient(top, #f6fca0, #bcc167);
+    background-image: -ms-linear-gradient(top, #f6fca0, #bcc167);
+    background-image: -o-linear-gradient(top, #f6fca0, #bcc167);
+    background-image: linear-gradient(to bottom, #f6fca0, #bcc167); }
+  .commit-changes .stat {
+    text-align: right;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #555;
+    vertical-align: middle; }
+
+.diffstat {
+  vertical-align: middle;
+  font-size: 0; }
+
+span.diffstat {
+  display: inline-block; }
+
+.diffstat span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+  color: transparent;
+  background-color: #bbb;
+  margin-left: 1px;
+  -moz-border-radius: 1.5px;
+  -webkit-border-radius: 1.5px;
+  border-radius: 1.5px; }
+
+.diffstat span.add {
+  background-color: #61c423; }
+
+.diffstat span.del {
+  background-color: #c52323; }

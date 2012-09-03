@@ -29,3 +29,5 @@ The quickest pattern to try out Gareth or help out with it's development is to d
   $ ./manage.py runserver
 
 This will setup an isolated virtualenv. Install the packages necessary for Gareth. Install Gareth. Create an admin:admin user for you. And then start a webserver on localhost.
+== CSS ==
+Editing of css files should not be done directly. Instead anyone modifying css should edit the .scss files and be running `sass --watch garethweb/public`.

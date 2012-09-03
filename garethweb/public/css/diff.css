@@ -1,0 +1,96 @@
+.diff {
+  font-size: 0.8em;
+  border: 1px solid #ccc;
+  position: relative;
+  overflow: auto;
+  margin-bottom: 1.5em; }
+  .diff .num, .diff .line {
+    font-family: 'Bitstream Vera Sans Mono', 'Courier', monospace;
+    vertical-align: top;
+    white-space: pre; }
+  .diff .num {
+    background-color: #f0f0f0;
+    border-right: 1px solid #ddd;
+    color: #aaa;
+    text-align: right;
+    padding: 0 0.5em;
+    min-width: 2.5em; }
+  .diff .line {
+    background-color: #f8f8ff;
+    padding: 0 0.5em; }
+    .diff .line.old {
+      background-color: #fdd; }
+    .diff .line.new {
+      background-color: #dfd; }
+    .diff .line.nil {
+      background-color: #f9f9f9; }
+  .diff del, .diff ins {
+    text-decoration: none; }
+  .diff del {
+    background-color: #faa; }
+  .diff ins {
+    background-color: #afa; }
+  .diff .differror {
+    background-color: #faa;
+    border: 1px solid #c55;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    padding: 0.25em; }
+
+.diff-header {
+  background-color: #f0f0f0;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#eaeaea));
+  background-image: -webkit-linear-gradient(top, #fafafa, #eaeaea);
+  background-image: -moz-linear-gradient(top, #fafafa, #eaeaea);
+  background-image: -ms-linear-gradient(top, #fafafa, #eaeaea);
+  background-image: -o-linear-gradient(top, #fafafa, #eaeaea);
+  background-image: linear-gradient(to bottom, #fafafa, #eaeaea);
+  border-bottom: 1px solid #ddd;
+  color: #555;
+  height: 33px;
+  line-height: 33px;
+  font-size: 1.2em;
+  padding: 0 1em;
+  text-shadow: 0 1px 0 #fff; }
+  .diff-header .fileicon {
+    display: inline-block;
+    background-color: #f7f7f7;
+    border: 1px solid;
+    border-color: #ccc #e5e5e5 #e5e5e5 #ccc;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    margin-right: 0.75em;
+    vertical-align: middle;
+    text-align: center; }
+
+.diff-wrapper {
+  width: 100%;
+  overflow: auto; }
+
+.diff-any {
+  width: 100%; }
+  .diff-any .line {
+    width: 100%; }
+
+.diff-sidebyside {
+  width: 100%; }
+  .diff-sidebyside .right.num {
+    border-left: 1px solid #ccc; }
+  .diff-sidebyside .line {
+    width: 50%; }
+
+.diff-image .line {
+  overflow: auto;
+  max-height: 500px; }
+
+table.diff-any .line {
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap; }
