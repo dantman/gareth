@@ -4,7 +4,9 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 import django.contrib.auth.hashers as pw
 from garethgit import GarethGit
+from garethweb import messagebroker
 import gareth.settings as settings
+import json
 
 class Project(models.Model):
 	"""
@@ -181,7 +183,8 @@ class Remote(models.Model):
 		return self.project.git.remote_branches(self.name)
 
 	def queue_fetch(self):
-		pass
+		cmd = { 'project': self.project.id, 'name': self.name }
+		messagebroker.send(json.dumps(cmd), destination='/queue/task.remote.fetch')
 
 	def run_fetch(self, progress=None):
 		state = RemoteFetch()
