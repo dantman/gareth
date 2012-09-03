@@ -2,3 +2,8 @@
 /dbs/
 /repos/
 *.pyc
+# virtualenv
+/.Python
+/lib/
+/bin/
+/include/
