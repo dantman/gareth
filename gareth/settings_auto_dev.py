@@ -25,8 +25,8 @@ DATABASES = {
 		'PORT': '',
 	}
 }
-if not os.path.exists(DATABASES['default']['NAME']):
-	os.makedirs(DATABASES['default']['NAME'])
+if not os.path.exists(os.path.dirname(DATABASES['default']['NAME'])):
+	os.makedirs(os.path.dirname(DATABASES['default']['NAME']))
 
 # Configure the repository path
 REPO_PATH = os.path.join(__root__, 'repos')
