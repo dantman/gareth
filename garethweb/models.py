@@ -210,7 +210,8 @@ class Remote(models.Model):
 			state.status = 2
 		state.completed_at = now()
 		state.save()
-		progress(state)
+		if progress:
+			progress(state)
 
 	def delete(self, *args, **kwargs):
 		self.project.git.rm_remote(self.name)
