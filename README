@@ -29,7 +29,7 @@ The quickest pattern to try out Gareth or help out with it's development is to d
   $ ./manage.py syncdb
   $ ./manage.py migrate
   $ ./manage.py createuser -a admin admin
-  $ ./manage.py run_gunicorn
+  $ ./manage.py run_gunicorn -c gareth/gunicorn_config.py
   # In another terminal
   $ ./manage.py taskrunner
 
