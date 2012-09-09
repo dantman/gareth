@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from gareth import settings
 
 urlpatterns = patterns('garethweb.views',
 	# Home
@@ -33,4 +34,10 @@ urlpatterns = patterns('garethweb.views',
 
     # Resources
     url(r'^resources/pygments.css$', 'resources.pygments'),
+)
+
+# Static files; May be served directly by webserver in production.
+# But configured here so they're always available during development.
+urlpatterns += patterns('',
+    url(r'^/?static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT, 'show_indexes':True}),
 )

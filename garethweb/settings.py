@@ -9,6 +9,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 	'garethweb',
 	'south', # Database migrations
+	'gunicorn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,9 +51,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"garethweb.context_processors.auth",
 )
 
-STATICFILES_DIRS = (
-	os.path.dirname( os.path.abspath( __file__ ) ) + '/public',
-)
+STATIC_ROOT = os.path.dirname( os.path.abspath( __file__ ) ) + '/public'
+STATICFILES_DIRS = ( STATIC_ROOT, )
 
 ROLE_HIERARCHY = {
 	'user': ['contributor'],
