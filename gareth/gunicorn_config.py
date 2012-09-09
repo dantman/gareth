@@ -3,4 +3,4 @@
 from gevent import monkey
 monkey.patch_all()
 
-worker_class = "gunicorn.workers.ggevent.GeventWorker"
+worker_class = "socketio.sgunicorn.GeventSocketIOWorker"

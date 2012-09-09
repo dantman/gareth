@@ -13,6 +13,8 @@
 {% block body %}{% endblock %}
 {% block javascripts %}
 <script src="{% static "js/jquery-1.7.2.min.js" %}"></script>
+<script src="{% static "js/socket.io.js" %}"></script>
+<script>WEB_SOCKET_SWF_LOCATION = '{% static "js/WebSocketMain.swf" %}';</script>
 {% endblock %}
 	</body>
 </html>

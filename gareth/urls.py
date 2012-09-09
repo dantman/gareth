@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -
 from django.conf.urls import patterns, include, url
 from gareth import settings
 
@@ -34,6 +35,9 @@ urlpatterns = patterns('garethweb.views',
 
     # Resources
     url(r'^resources/pygments.css$', 'resources.pygments'),
+
+    # socket.io
+    url(r'^socket\.io', 'socketio_view.socketio_service', name='socketio_service'),
 )
 
 # Static files; May be served directly by webserver in production.

@@ -1,6 +1,7 @@
 
 == Requirements ==
 * gevent
+* gevent-socketio
 * gunicorn # webserver
 * django
 * south
