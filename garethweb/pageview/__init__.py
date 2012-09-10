@@ -4,7 +4,9 @@ from django.template import RequestContext
 from django.utils.html import escape
 from django.core.urlresolvers import reverse, reverse_lazy
 from garethweb.pageview.template import get_template
+from garethweb.pageview.loader import ResourceLoader
 from garethweb.models import Project, Remote, User
+from garethweb import theme
 from garethgit import GitCommit
 import re
 
@@ -101,9 +103,14 @@ class GarethView():
 		self.dict = {}
 		self._breadcrumbs = Breadcrumbs()
 		self.buttons = []
-		self.theme = 'bootstrap'
+		self._theme = 'bootstrap'
 		self.activenav = ()
 		self.activetab = ()
+		self.loader = ResourceLoader()
+
+		# Load typical things first
+		self.use('jquery')
+		self.use('diff.css') # @todo We can move this somewhere else now, right?
 
 	def set(self, *args, **kwargs):
 		for k in kwargs:
@@ -112,6 +119,18 @@ class GarethView():
 	def crumb(self, *crumbs):
 		for crumb in crumbs:
 			self._breadcrumbs.add(crumb)
+
+	@property
+	def theme(self):
+		_theme = getattr(self, '_theme', None)
+		if isinstance(_theme, basestring):
+			_theme = theme.get(_theme)
+			self._theme = _theme
+		return _theme
+
+	@theme.setter
+	def theme(self, name):
+		self._theme = theme.get(name)
 
 	@property
 	def title_text(self):
@@ -178,6 +197,9 @@ class GarethView():
 				b['data'] = post
 		self.buttons.append(b)
 
+	def use(self, resource):
+		self.loader.require(resource)
+
 	@property
 	def template(self):
 		return get_template(self.theme, ('view',)+self.page)
@@ -214,10 +236,12 @@ class GarethView():
 			tab['active'] = isactive(tab, self.activetab)
 			d['tabs'].append(tab)
 		d['buttons'] = self.buttons
+		d['loader'] = self.loader
 		return RequestContext(self.request, d)
 
 	@property
 	def response(self):
+		self.theme.view_before_render(self)
 		return HttpResponse(self.template.render(self.context))
 
 	def __call__(self):

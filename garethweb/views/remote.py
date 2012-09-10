@@ -60,6 +60,7 @@ def show(request, remote):
 	if remote.user == request.currentuser:
 		view.add_button(href=reverse('remote_delete', kwargs={ 'project': remote.project.name, 'ID': remote.name }), text='Delete')
 	view.crumb(remote)
+	view.use('remote-fetch-progress-alert')
 	return view()
 
 @_oneremote
