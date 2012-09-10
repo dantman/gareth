@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.utils.html import escape

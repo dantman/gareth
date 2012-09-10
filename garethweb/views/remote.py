@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -
 from hashlib import sha1
 import uuid
 from django.shortcuts import redirect, get_object_or_404

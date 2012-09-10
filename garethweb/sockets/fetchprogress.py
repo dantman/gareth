@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -
 from socketio.namespace import BaseNamespace
 
 class FetchProgressListener(BaseNamespace):
