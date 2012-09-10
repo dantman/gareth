@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import django.contrib.auth.hashers as pw
 from garethgit import GarethGit
 from garethweb import messagebroker
+from datetime import datetime
 import gareth.settings as settings
 import json
 
@@ -168,6 +169,32 @@ class RemoteFetch(models.Model):
 	def __unicode__(self):
 		return "%s (started: %s, completed: %s, progress: %s%%)" % (self.status_label, self.started_at, self.completed_at, self.progress)
 
+	@property
+	def dict(self):
+		keys = (
+			'started_at',
+			'completed_at',
+			'compressing_objects',
+			'receiving_objects',
+			'resolving_deltas',
+			'progress',
+			'is_completed',
+			'is_finished',
+		)
+		out = {}
+		out['project'] = self.remote.project.name
+		out['remote'] = self.remote.name
+		for key in keys:
+			value = getattr(self, key)
+			if isinstance(value, datetime):
+				value = value.isoformat(' ')
+			out[key] = value
+		out['status'] = {
+			'code': self.status,
+			'label': self.status_label,
+		}
+		return out
+
 class Remote(models.Model):
 	"""
 	Remotes. Provides user-specific git remotes for fetching from.
@@ -201,6 +228,7 @@ class Remote(models.Model):
 			elif event == 'resolving-deltas':
 				state.resolving_deltas = p
 			state.save()
+			messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.progress')
 			if progress:
 				progress(state)
 		ret = self.project.git.fetch(self.name, progress=handle_progress)
@@ -210,6 +238,7 @@ class Remote(models.Model):
 			state.status = 2
 		state.completed_at = now()
 		state.save()
+		messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.progress')
 		if progress:
 			progress(state)
 
