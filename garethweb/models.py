@@ -240,6 +240,7 @@ class Remote(models.Model):
 		state.completed_at = now()
 		state.save()
 		messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.progress')
+		messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.finish')
 		if progress:
 			progress(state)
 
