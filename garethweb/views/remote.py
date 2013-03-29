@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -
 from hashlib import sha1
-import uuid
+from urlparse import urlsplit
+import uuid, re
 from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.messages as m
 from django.http import HttpResponse
+from django.utils.text import get_text_list
 from django import forms
 from garethweb.models import Project, Remote
 from garethweb.decorators import needs_right
 from garethweb.views.project import ProjectView
+from garethweb.constants import SUPPORTED_GIT_PROTOCOLS
 
 class DeleteConfirmForm(forms.Form):
 	pass
@@ -19,6 +22,24 @@ class RemoteForm(forms.ModelForm):
 	class Meta:
 		model = Remote
 		fields = ['url']
+
+	def clean_url(self):
+		data = self.cleaned_data['url']
+		url = urlsplit(data)
+		if not url.scheme and not url.netloc:
+			m = re.match('^([^@]+@[^/]+):(.*)', url.path)
+			if m:
+				# user@host:... is equivalent to a ssh url
+				url = urlsplit("ssh://%s/%s" % (m.group(1), m.group(2)))
+		if not url.scheme:
+			raise forms.ValidationError("The remote URL must be an absolute URL.")
+		if url.scheme == 'ssh':
+			raise forms.ValidationError("Gareth cannot fetch from ssh based remotes.")
+		if url.scheme not in SUPPORTED_GIT_PROTOCOLS:
+			raise forms.ValidationError("'%s' is not an acceptable url scheme. Gareth only accepts %s urls."
+				% (url.scheme, get_text_list(SUPPORTED_GIT_PROTOCOLS, 'and')))
+
+		return data
 
 @needs_right('contributor')
 def create(request, project):

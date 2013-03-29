@@ -418,7 +418,7 @@ class GarethGit(object):
 
 		return ProcGit(
 			command='fetch',
-			args=('--verbose', '--prune', '--progress', remote),
+			args=('--verbose', '--prune', '--no-tags', '--progress', remote),
 			stderr=stderr,
 			git_dir=self.path
 		).exit_ok()
