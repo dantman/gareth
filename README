@@ -12,6 +12,8 @@
 
 You can use `pip install -r requirements.txt` to install all the necessary modules at the last version we tested them with.
 
+If you wish to use MySQL as the database you will also need 'mysql-python'.
+
 == Setup ==
 # Create a settings file at gareth/settings_user.py; There is a settings_user-sample.py you can use as a base.
 # If using sqlite ensure the directory the database will live in exists. Otherwise make sure the database and db user exists and has the necessary permissions.
