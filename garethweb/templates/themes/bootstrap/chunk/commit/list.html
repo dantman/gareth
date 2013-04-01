@@ -9,7 +9,7 @@
 				<img class="avatar" src="{{ commit.author.avatar }}">
 				<p class="commit-title">{{ commit.title }}</p>
 				<p class="commit-authored">
-					Authored by <span class="commit-user">{{ commit.author.name }}</span>, <time datetime="{{ commit.committed_at.isoformat }}Z">{{ commit.committed_at|naturaltime }}</time>
+					Authored by <span class="commit-user">{{ commit.author.name }}</span>, <time datetime="{{ commit.committed_at.isoformat }}Z" title="{{ commit.committed_at.isoformat }}Z">{{ commit.committed_at|naturaltime }}</time>
 				</p>
 			</td>
 		</tr>
