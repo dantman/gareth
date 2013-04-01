@@ -16,7 +16,7 @@ class TaskListener(object):
 		if headers.get('destination').startswith('/queue/task.remote.fetch'):
 			cmd = json.loads(message)
 			r = Remote.objects.get(name=cmd['name'])
-			out.write("Running fetch for %s (%s)\n" % (r.name, r.project.name))
+			self.out.write("Running fetch for %s (%s)\n" % (r.name, r.project.name))
 			r.run_fetch()
 
 class TaskRunner(object):
