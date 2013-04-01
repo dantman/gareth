@@ -2,3 +2,4 @@
 ** Do it with a list, so we can plug in user specified ones
 ** Add a default one for GitHub: Normalize everything to https: (ssh, http, https, and git) and strip out the user@
 * We're probably going to have to index the whole git repo in order for listing commits in branches, etc... to be sane. Do some performance tests to see what the best way to walk through commits up till a base is; Walking through them in a SQL database (probably by primary key). Walking through them in a key-value store. Or directly walking through the git objects.
+* Besides python plugins also consider in some areas using lupa to embed Lua to add custom handling. Perhaps consider prolog in some areas like the ones Gerrit does.

@@ -1,6 +1,11 @@
 import threading, logging, stomp
 from gareth.settings import STOMP
 
+# @todo This is typically overridden by gevent and will likely result in each greenlet
+#       (ie: each request) having it's own connection. Our real goal is simply to avoid
+#       different threads from trying to use the same STOMP connection at the exact same time.
+#       In theory it should be perfectly fine for greenlets on the same thread to use the same STOMP connection.
+#       Consider tweaking this so it is in fact a real threading local instead of a greenlet local.
 _local_thread = threading.local()
 
 class BasicListener(object):
