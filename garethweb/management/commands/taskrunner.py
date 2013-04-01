@@ -14,4 +14,4 @@ class Command(BaseCommand):
 	help = 'Starts a taskrunner process'
 
 	def handle(self, *args, **options):
-		TaskRunner().run()
+		TaskRunner().run(self.stdout)
