@@ -37,35 +37,17 @@ Gareth uses a STOMP server to communicate events — such as repository fetch re
 
 Gareth is developed against the Apache [Apollo][] STOMP server and hasn't been tested at all against any other STOMP server.
 
-## Setup
+## Installation and development
+Gareth requires some fairly heavy dependencies to function correctly. If you are not installing this in production the best way to run Gareth is to use [Gareth Vagrant][] which will use Vagrant to setup a Virtual Machine and install Gareth and all of it's dependencies into that VM separate from the rest of your system.
+
+## General setup
 1. Create a settings file at `gareth/settings_user.py`; There is a `settings_user-sample.py` you can use as a base.
 2. If using sqlite ensure the directory the database will live in exists. Otherwise make sure the database and db user exists and has the necessary permissions and you have the necessary python library for Django to talk to the database server.
 3. Run `./manage.py syncdb` to initialize the database
 4. Run `./manage.py migrate` to finish database setup
 5. You can run `./manage.py createuser -a {username} {password}` to create an admin user to login with
-6. For development you can run `./manage.py runserver` to start up a development server on localhost
-
-<em>Sorry, this information is a little out of date. Gunicorn should be run instead of the normal wsgi server. There's a second taskrunner process that should be run. And Gareth requires a STOMP server to function completely.</em>
-
-## Developer quick install
-The quickest pattern to try out Gareth or help out with it's development is to do this:
-```shell
-# Clone Gareth and cd into the correct directory
-$ virtualenv .
-$ source bin/activate
-$ pip install -r requirements.txt
-$ ./setupdev.py
-$ ./manage.py syncdb
-$ ./manage.py migrate
-$ ./manage.py createuser -a admin admin
-$ ./manage.py run_gunicorn -c gareth/gunicorn_config.py
-# In another terminal
-$ ./manage.py taskrunner
-```
-
-This will setup an isolated virtualenv. Install the packages necessary for Gareth. Install Gareth. Create an admin:admin user for you. And then start a webserver on localhost.
-
-<em>Sorry, this information is a little out of date. Gareth and the taskrunnerm requires a configured STOMP server to function completely which is not included .</em>
+6. Startup the Gunicorn webserver
+7. Run `./manage.py taskrunner` to startup the Gareth task runner
 
 ## CSS
 Editing of css files should not be done directly. Instead anyone modifying css should edit the .scss files and be running `sass --watch garethweb/public`.
@@ -73,3 +55,4 @@ Editing of css files should not be done directly. Instead anyone modifying css s
  [Python]: http://www.python.org/
  [Django]: https://www.djangoproject.com/
  [Apollo]: https://activemq.apache.org/apollo/
+ [Gareth Vagrant]: https://github.com/dantman/gareth-vagrant
