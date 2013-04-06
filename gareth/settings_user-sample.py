@@ -2,6 +2,14 @@
 # Enable development settings
 from settings_dev import *
 
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = [...]
+
+REPO_PATH = [...]
+
+# Use secure cookies (only do this if using https://)
+SESSION_COOKIE_SECURE = True
+
 # Setup the database
 DATABASES = {
 	'default': {
@@ -14,10 +22,9 @@ DATABASES = {
 	}
 }
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = [...]
-
-REPO_PATH = [...]
-
-# Use secure cookies (only do this if using https://)
-SESSION_COOKIE_SECURE = True
+# Setup the message queue system
+STOMP = {
+	'host': ('localhost', 61613),
+	'user': '',
+	'pass': '',
+}

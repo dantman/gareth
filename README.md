@@ -23,9 +23,9 @@ Gareth depends on these python libraries:
   * `pytz`
   * `pygments`
   * `diff-match-patch`
-  * `stomp.py`
+  * `stompest`
 
-You can use `pip install -r requirements.txt` to install all the necessary modules at the last version we tested them with.
+You can use `pip install -r requirements.txt` to install all the necessary modules.
 
 If you wish to use MySQL as the database you will also need the `mysql-python` library.
 

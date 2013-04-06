@@ -1,7 +1,11 @@
+import re, logging
+# @todo Explicitly use gevent's modules instead of the native ones
 from subprocess import Popen, PIPE
 from select import select
 from select import error as SelectError
-import re
+
+logger = logging.getLogger('procgit')
+logger.setLevel(logging.DEBUG)
 
 def collect_chunks(buffer):
 	def handler(chunk):
@@ -45,7 +49,7 @@ class ProcGit():
 		env = {}
 		if self.git_dir:
 			env['GIT_DIR'] = self.git_dir
-		print "Running %s" % args
+		logger.debug("Running %s" % args)
 		p = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.git_dir, env=env)
 		rlist = [p.stderr, p.stdout]
 		wlist = []

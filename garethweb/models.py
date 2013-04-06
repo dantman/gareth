@@ -8,7 +8,6 @@ from garethgit import GarethGit
 from garethweb import messagebroker
 from datetime import datetime
 import gareth.settings as settings
-import json
 
 class Project(models.Model):
 	"""
@@ -212,7 +211,7 @@ class Remote(models.Model):
 
 	def queue_fetch(self):
 		cmd = { 'project': self.project.id, 'name': self.name }
-		messagebroker.send(json.dumps(cmd), destination='/queue/task.remote.fetch')
+		messagebroker.send(cmd, destination='/queue/task.remote.fetch')
 
 	def run_fetch(self, progress=None):
 		state = RemoteFetch()
@@ -229,7 +228,7 @@ class Remote(models.Model):
 			elif event == 'resolving-deltas':
 				state.resolving_deltas = p
 			state.save()
-			messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.progress')
+			messagebroker.send(state.dict, destination='/topic/remote.fetch.progress')
 			if progress:
 				progress(state)
 		ret = self.project.git.fetch(self.name, progress=handle_progress)
@@ -239,8 +238,8 @@ class Remote(models.Model):
 			state.status = 2
 		state.completed_at = now()
 		state.save()
-		messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.progress')
-		messagebroker.send(json.dumps(state.dict), destination='/topic/remote.fetch.finish')
+		messagebroker.send(state.dict, destination='/topic/remote.fetch.progress')
+		messagebroker.send(state.dict, destination='/topic/remote.fetch.finish')
 		if progress:
 			progress(state)
 
