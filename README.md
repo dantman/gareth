@@ -52,7 +52,31 @@ Gareth is developed against the Apache [Apollo][] STOMP server and hasn't been t
 ## CSS
 Editing of css files should not be done directly. Instead anyone modifying css should edit the .scss files and be running `sass --watch garethweb/public`.
 
+## License
+### Gareth code
+Copyright © 2013 - Daniel Friesen
+
+Gareth is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Gareth is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+A copy of the [GNU Affero General Public License][AGPL] is available inside the `AGPL` file.
+
+Additionally when turning isolated parts of the Gareth codebase into libraries separate from Gareth. The code that is turned into a library may be relicensed under the [MIT License][], the latest version of the [Apache License][], the [LGPL][], or dual-licensed under the [GPL][] and the Apache License or MIT License.
+
+### Documentation
+In addition to whatever other license it may be under. Documentation within the Gareth codebase whether in the form of standalone documentation or in the form of code comments may be used under the [Creative Commons Attribution 3.0][CC-BY-3.0] license.
+
+### Other code
+Gareth contains some 3rd party libraries inside of it's codebase. These libraries are under different license terms than the rest of the Gareth codebase. These libraries, their information, and license terms can be found inside the `NOTICE.md` file.
+
  [Python]: http://www.python.org/
  [Django]: https://www.djangoproject.com/
  [Apollo]: https://activemq.apache.org/apollo/
  [Gareth Vagrant]: https://github.com/dantman/gareth-vagrant
+ [MIT License]: http://opensource.org/licenses/MIT
+ [Apache License]: http://www.apache.org/licenses/LICENSE-2.0
+ [AGPL]: https://www.gnu.org/licenses/agpl-3.0.html
+ [LGPL]: https://www.gnu.org/licenses/lgpl.html
+ [GPL]: https://www.gnu.org/licenses/gpl.html
+ [CC-BY-3.0]: https://creativecommons.org/licenses/by/3.0/
