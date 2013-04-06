@@ -8,6 +8,9 @@ Gareth is instead fundamentally based on the standard git practice of everyone p
 
 Under Gareth's model. Gareth takes the role of managing the primary repository. You push any changes you want into your own public repository — hosted anywhere you want. Commits are then pulled into a review area where other contributors and maintainers can review your code and test it out. When a maintainer has decided to accept your commit Gareth does the work of merging it into the primary repository.
 
+## Installation and development
+Gareth requires some fairly heavy dependencies to function correctly. If you are not installing this in production the best way to run Gareth is to use [Gareth Vagrant][] which will use Vagrant to setup a Virtual Machine and install Gareth and all of it's dependencies into that VM separate from the rest of your system.
+
 ## Requirements
 Gareth is written in [Python][] using the [Django][] framework and requires python, some other python libraries, a SQL database, and a STOMP server to function.
 
@@ -36,9 +39,6 @@ Gareth stores most of it's data inside of a SQL database. It should work fine wi
 Gareth uses a STOMP server to communicate events — such as repository fetch requests and progress updates — between web requests, extra processes like the taskrunner, and clients listening over socket.io connections.
 
 Gareth is developed against the Apache [Apollo][] STOMP server and hasn't been tested at all against any other STOMP server.
-
-## Installation and development
-Gareth requires some fairly heavy dependencies to function correctly. If you are not installing this in production the best way to run Gareth is to use [Gareth Vagrant][] which will use Vagrant to setup a Virtual Machine and install Gareth and all of it's dependencies into that VM separate from the rest of your system.
 
 ## General setup
 1. Create a settings file at `gareth/settings_user.py`; There is a `settings_user-sample.py` you can use as a base.
