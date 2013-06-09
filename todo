@@ -4,3 +4,6 @@
 * We're probably going to have to index the whole git repo in order for listing commits in branches, etc... to be sane. Do some performance tests to see what the best way to walk through commits up till a base is; Walking through them in a SQL database (probably by primary key). Walking through them in a key-value store. Or directly walking through the git objects.
 * Besides python plugins also consider in some areas using lupa to embed Lua to add custom handling. Perhaps consider prolog in some areas like the ones Gerrit does.
 * Support gareth as a system library and loading the site config from places other than gareth.settings_user (ENV var, file in cwd)
+* When implementing search/filter use http://documentcloud.github.io/visualsearch/ to make the search box friendly.
+* Compare Socket.IO via gevent-socketio (https://github.com/abourget/gevent-socketio) against SockJS via sockjs-gevent (https://github.com/sdiehl/sockjs-gevent or https://github.com/njoyce/sockjs-gevent)
+* Try making our Gareth Git code use GitPython for some of the stuff it does: http://pythonhosted.org/GitPython/0.3.1/intro.html
