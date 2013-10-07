@@ -7,3 +7,4 @@
 * When implementing search/filter use http://documentcloud.github.io/visualsearch/ to make the search box friendly.
 * Compare Socket.IO via gevent-socketio (https://github.com/abourget/gevent-socketio) against SockJS via sockjs-gevent (https://github.com/sdiehl/sockjs-gevent or https://github.com/njoyce/sockjs-gevent)
 * Try making our Gareth Git code use GitPython for some of the stuff it does: http://pythonhosted.org/GitPython/0.3.1/intro.html
+** Actually, look over http://stackoverflow.com/questions/1456269/python-git-module-experiences and do some practical comparisons between GitPython, Dulwich, pygit2, and Gittle.
